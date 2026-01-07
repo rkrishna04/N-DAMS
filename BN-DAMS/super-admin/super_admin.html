@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Super Admin | Root Access</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-gray-900 flex text-slate-200">
+
+    <aside class="w-64 bg-black h-screen sticky top-0 border-r border-slate-800 p-6 hidden md:block">
+        <div class="mb-10">
+            <h2 class="text-2xl font-bold text-red-500 flex items-center">
+                <i class="fa-solid fa-shield-halved mr-2"></i>ROOT
+            </h2>
+            <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em]">System Infrastructure</p>
+        </div>
+        
+        <nav class="space-y-1">
+            <a href="#" class="flex items-center space-x-3 p-3 bg-red-600/10 text-red-500 border border-red-500/20 rounded-lg">
+                <i class="fa-solid fa-microchip"></i>
+                <span class="font-medium">System Health</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
+                <i class="fa-solid fa-users-gear"></i>
+                <span>Role Management</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
+                <i class="fa-solid fa-database"></i>
+                <span>Logs & Backups</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
+                <i class="fa-solid fa-sliders"></i>
+                <span>Global Settings</span>
+            </a>
+            <div class="pt-10 border-t border-slate-800 mt-10">
+                <button class="flex items-center space-x-3 p-3 text-slate-500 hover:text-red-400 w-full transition">
+                    <i class="fa-solid fa-lock-open"></i>
+                    <span>Exit Root</span>
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8 overflow-y-auto">
+        <header class="flex justify-between items-center mb-10">
+            <div>
+                <h1 class="text-3xl font-extrabold text-white tracking-tight">System Infrastructure</h1>
+                <p class="text-slate-400">Node Status: <span class="text-green-500">Online & Optimized</span></p>
+            </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="text-right">
+                    <p class="text-xs text-slate-500 uppercase font-bold">Server Load</p>
+                    <div class="w-32 bg-slate-800 h-2 rounded-full mt-1">
+                        <div class="bg-red-500 h-2 rounded-full" style="width: 24%"></div>
+                    </div>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-red-600 to-orange-400 flex items-center justify-center text-white shadow-lg shadow-red-500/20">
+                    <i class="fa-solid fa-user-shield"></i>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+            <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
+                <div class="flex justify-between items-start mb-4">
+                    <i class="fa-solid fa-server text-blue-400 text-xl"></i>
+                    <span class="text-xs font-mono text-green-400">UP</span>
+                </div>
+                <p class="text-slate-400 text-sm">Active Database Instances</p>
+                <h3 class="text-2xl font-bold">14 / 15</h3>
+            </div>
+            <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
+                <div class="flex justify-between items-start mb-4">
+                    <i class="fa-solid fa-bolt text-yellow-400 text-xl"></i>
+                    <span class="text-xs font-mono text-slate-400">22ms</span>
+                </div>
+                <p class="text-slate-400 text-sm">Global API Latency</p>
+                <h3 class="text-2xl font-bold text-white">Optimal</h3>
+            </div>
+            <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
+                <div class="flex justify-between items-start mb-4">
+                    <i class="fa-solid fa-bug text-red-400 text-xl"></i>
+                    <span class="text-xs font-mono text-red-400">High Priority</span>
+                </div>
+                <p class="text-slate-400 text-sm">Unresolved System Exceptions</p>
+                <h3 class="text-2xl font-bold">02</h3>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            
+            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden">
+                <div class="p-6 border-b border-slate-700 bg-slate-800/80 flex justify-between items-center">
+                    <h2 class="font-bold text-white">Admin & User Escalation</h2>
+                    <button class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-slate-300 transition">View All Users</button>
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs">MA</div>
+                            <div>
+                                <p class="text-sm font-medium">Mark Anderson</p>
+                                <p class="text-[10px] text-slate-500">Current Role: <span class="text-indigo-400">Admin</span></p>
+                            </div>
+                        </div>
+                        <select class="bg-slate-800 text-xs border border-slate-600 rounded p-1 outline-none">
+                            <option>Admin</option>
+                            <option>Super Admin</option>
+                            <option>Normal User</option>
+                        </select>
+                    </div>
+                    <div class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">SW</div>
+                            <div>
+                                <p class="text-sm font-medium">Sarah White</p>
+                                <p class="text-[10px] text-slate-500">Current Role: <span class="text-emerald-400">Normal User</span></p>
+                            </div>
+                        </div>
+                        <select class="bg-slate-800 text-xs border border-slate-600 rounded p-1 outline-none">
+                            <option>Normal User</option>
+                            <option>Admin</option>
+                            <option>Super Admin</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden">
+                <div class="p-6 border-b border-slate-700 bg-slate-800/80">
+                    <h2 class="font-bold text-white">Security Audit Trail</h2>
+                </div>
+                <div class="p-6 font-mono text-[11px] space-y-3">
+                    <div class="flex space-x-3">
+                        <span class="text-slate-500">[14:22:01]</span>
+                        <span class="text-amber-400">WARN:</span>
+                        <span class="text-slate-300">Unauthorized login attempt from IP 192.168.1.45</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <span class="text-slate-500">[13:45:12]</span>
+                        <span class="text-blue-400">INFO:</span>
+                        <span class="text-slate-300">User #8821 (Admin) deleted 4 records from 'Revenue' table</span>
+                    </div>
+                    <div class="flex space-x-3">
+                        <span class="text-slate-500">[12:10:55]</span>
+                        <span class="text-green-400">SYS:</span>
+                        <span class="text-slate-300">Automated backup of Database 'PROD_v2' completed successfully</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body class="bg-slate-50 flex">
+
+    <aside class="w-64 bg-indigo-900 h-screen sticky top-0 text-white p-6 hidden md:block">
+        <div class="mb-10">
+            <h2 class="text-2xl font-bold text-indigo-300">AdminPanel</h2>
+            <p class="text-xs text-indigo-400 uppercase tracking-widest">Administrative Access</p>
+        </div>
+        
+        <nav class="space-y-2">
+            <a href="#" class="flex items-center space-x-3 p-3 bg-indigo-700 rounded-lg shadow-inner">
+                <i class="fa-solid fa-gauge"></i>
+                <span>Management Hub</span>
+            </a>
+            <a href="datamanagement.html" class="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Data Management</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
+                <i class="fa-solid fa-users"></i>
+                <span>Manage Users</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span>Reports & Analytics</span>
+            </a>
+            <div class="pt-10 border-t border-indigo-800 mt-10">
+                <button class="flex items-center space-x-3 p-3 text-red-300 hover:bg-red-900/20 w-full rounded-lg transition">
+                    <i class="fa-solid fa-power-off"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-8">
+        <header class="flex justify-between items-center mb-8">
+            <div>
+                <h1 class="text-2xl font-bold text-slate-800">Admin Control Center</h1>
+                <p class="text-slate-500">Managing Department: Sales & Operations</p>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition">
+                    + Create New Entry
+                </button>
+                <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold ring-2 ring-indigo-200">AD</div>
+            </div>
+        </header>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <p class="text-slate-400 text-xs font-bold uppercase">Pending Approvals</p>
+                <h3 class="text-2xl font-bold text-amber-600">08</h3>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <p class="text-slate-400 text-xs font-bold uppercase">Total user</p>
+                <h3 class="text-2xl font-bold text-slate-800">52</h3>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <p class="text-slate-400 text-xs font-bold uppercase">Active user</p>
+                <h3 class="text-2xl font-bold text-green-600">8</h3>
+            </div>
+            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                <p class="text-slate-400 text-xs font-bold uppercase">Links</p>
+                <h3 class="text-2xl font-bold text-indigo-600">24</h3>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                <h2 class="font-bold text-slate-800">Assets Position</h2>
+                <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center transition shadow-md shadow-emerald-200">
+                    <i class="fa-solid fa-file-arrow-down mr-2"></i> Download CSV Report
+                </button>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-slate-50 text-slate-600 text-xs uppercase">
+                        <tr>
+                            <th class="p-4">ID</th>
+                            <th class="p-4">nodes</th>
+                            <th class="p-4">data</th>
+                            <th class="p-4">data</th>
+                            <th class="p-4 text-center">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-100 text-slate-700">
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-4 font-mono text-xs">#PRJ-9021</td>
+                            <td class="p-4 font-medium">data</td>
+                            <td class="p-4">data</td>
+                            <td class="p-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">ACTIVE</span></td>
+                            <td class="p-4 text-center space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900 text-sm font-semibold">Edit</button>
+                                <button class="text-red-500 hover:text-red-700 text-sm font-semibold">Delete</button>
+                            </td>
+                        </tr>
+                        <tr class="hover:bg-slate-50 transition">
+                            <td class="p-4 font-mono text-xs">#PRJ-8842</td>
+                            <td class="p-4 font-medium">data</td>
+                            <td class="p-4">data</td>
+                            <td class="p-4"><span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs font-bold">REVIEW</span></td>
+                            <td class="p-4 text-center space-x-2">
+                                <button class="text-indigo-600 hover:text-indigo-900 text-sm font-semibold">Edit</button>
+                                <button class="text-red-500 hover:text-red-700 text-sm font-semibold">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+</body>
+</html>

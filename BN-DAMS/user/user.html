@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard | Command Mode</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Modern White Galaxy Button Styling */
+        .module-btn {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .module-btn::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
+            transition: 0.5s;
+        }
+
+        .module-btn:hover::before { left: 100%; }
+
+        .module-btn:hover {
+            transform: scale(1.05);
+            border-color: #6366f1;
+            background: #ffffff;
+            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1);
+        }
+
+        /* Hover Glow Colors */
+        .glow-blue:hover i { color: #2563eb; }
+        .glow-purple:hover i { color: #7c3aed; }
+        .glow-emerald:hover i { color: #059669; }
+    </style>
+</head>
+<body class="bg-gray-50 flex flex-col min-h-screen">
+
+    <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-50">
+        <div class="flex items-center space-x-2">
+                <i class="fa-solid fa-microchip text-blue-500 text-xl"></i>
+            <span class="text-xl font-bold text-slate-800 tracking-tight">N-DAMS</span>
+        </div>
+
+        <div class="hidden md:flex flex-1 max-w-md mx-8">
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
+                </span>
+                <input type="text" placeholder="Search records..." 
+                       class="w-full bg-slate-100 border-transparent rounded-full py-2 pl-10 pr-4 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm">
+            </div>
+        </div>
+
+        <div class="flex items-center space-x-4">
+            <span class="hidden sm:inline text-sm font-medium text-slate-600">test demo</span>
+            <button class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center border-2 border-white shadow-sm hover:bg-slate-300 transition">
+                <i class="fa-solid fa-user text-slate-600"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="flex flex-1">
+        <main class="flex-1 p-8">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-2xl font-bold text-slate-800">NOCC Data Analyzer & Management System</h1>
+                <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-medium">
+                    <i class="fa-solid fa-lock mr-1"></i> View Only Mode
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="text-slate-500 text-sm">Total Links</p>
+                    <h3 class="text-3xl font-bold text-slate-800">24</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="text-slate-500 text-sm">Recently Viewed</p>
+                    <h3 class="text-3xl font-bold text-slate-800">3</h3>
+                </div>
+                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                    <p class="text-slate-500 text-sm">History</p>
+                    <h3 class="text-3xl font-bold text-slate-800">12</h3>
+                </div>
+            </div>
+
+            <section class="mb-12">
+                <div class="flex items-center space-x-4 mb-8">
+                    <div class="h-px w-full bg-gradient-to-r from-indigo-500/30 to-transparent"></div>
+                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-indigo-500 whitespace-nowrap">Quick Module Access</h2>
+                    <div class="h-px w-full bg-gradient-to-r from-transparent to-indigo-500/30"></div>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5" id="moduleGrid">
+                    </div>
+            </section>
+        </main>
+    </div>
+
+    <footer class="bg-white border-t border-slate-200 py-6 px-8">
+        <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500 space-y-4 md:space-y-0">
+            <p>&copy; 2026 N-DAMS. All rights reserved.</p>
+            <div class="flex space-x-6">
+                <a href="#" class="hover:text-blue-600 transition">Contact Support</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Module configuration matching your list
+        const modules = [
+            'FOIS', 'EARTH', 'FC', 'TCS', 'UTS', 'PRS', 'COIS', 'ICMS', 'CMS', 'RMS',
+            'SATS', 'BMS', 'LMS', 'VMS', 'NMS', 'TMS', 'ZMS', 'GMS', 'FMS', 'WMS',
+            'CORE', 'NODE', 'LINK', 'SITE'
+        ];
+
+        const grid = document.getElementById('moduleGrid');
+        
+        modules.forEach((mod) => {
+            const btn = document.createElement('button');
+            
+            // Randomly assign a subtle color theme for icons
+            const themes = [
+                {color: 'text-blue-500', glow: 'glow-blue'},
+                {color: 'text-purple-500', glow: 'glow-purple'},
+                {color: 'text-emerald-500', glow: 'glow-emerald'}
+            ];
+            const theme = themes[Math.floor(Math.random() * themes.length)];
+
+            btn.className = `module-btn py-7 px-4 rounded-2xl flex flex-col items-center justify-center space-y-3 group ${theme.glow}`;
+            
+            // Link logic (Modify as needed)
+            btn.onclick = () => window.location.href = `module-${mod.toLowerCase()}.html`;
+            
+            btn.innerHTML = `
+                <i class="fa-solid fa-atom ${theme.color} text-2xl group-hover:rotate-180 transition-transform duration-700"></i>
+                <span class="text-[11px] font-black tracking-widest text-slate-800 group-hover:text-indigo-600 transition-colors uppercase">${mod}</span>
+            `;
+            grid.appendChild(btn);
+        });
+    </script>
+</body>
+</html>
