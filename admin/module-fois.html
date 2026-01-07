@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOIS | Full Inventory Detail</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body {
+            background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%);
+            color: #1e293b;
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        ::-webkit-scrollbar { height: 8px; width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        ::-webkit-scrollbar-thumb { background: #4f46e5; border-radius: 10px; }
+        
+        tr:hover { background: rgba(79, 70, 229, 0.05) !important; }
+
+        /* Modal Overlay Styling */
+        .modal-overlay {
+            transition: all 0.3s ease;
+            display: none;
+            opacity: 0;
+        }
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="flex justify-between items-center mb-8">
+        <div class="flex items-center space-x-4">
+            <a href="datamanagement.html" class="glass-panel p-3 rounded-xl hover:bg-black/5 transition text-indigo-600 group">
+                <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+            </a>
+            <div>
+                <h1 class="text-2xl font-bold tracking-wider uppercase text-slate-900">FOIS <span class="text-indigo-600 text-sm font-light">Details Management </span></h1>
+                <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em]">Purifying the stream to protect the outcome.</p>
+            </div>
+        </div>
+        
+        <div class="flex space-x-3">
+            <button class="glass-panel px-4 py-2 rounded-lg text-xs font-bold hover:border-blue-500 transition flex items-center text-blue-600">
+                <i class="fa-solid fa-magnifying-glass mr-2"></i> Search Node
+            </button>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-xs font-bold shadow-lg transition shadow-indigo-200">
+                + Add New Router
+            </button>
+            <button class="glass-panel px-4 py-2 rounded-lg text-xs font-bold hover:border-emerald-500 transition flex items-center text-emerald-700">
+                <i class="fa-solid fa-file-excel mr-2 text-emerald-600"></i> Export Excel
+            </button>
+        </div>
+    </header>
+
+    <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-black/5">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse whitespace-nowrap">
+                <thead>
+                    <tr class="bg-indigo-50 text-indigo-700 uppercase text-[10px] font-black tracking-widest">
+                        <th class="p-4 border-b border-black/5 text-center">Sr. No.</th>
+                        <th class="p-4 border-b border-black/5">Zone</th>
+                        <th class="p-4 border-b border-black/5">Division</th>
+                        <th class="p-4 border-b border-black/5">Device Category</th>
+                        <th class="p-4 border-b border-black/5">Tier Status</th>
+                        <th class="p-4 border-b border-black/5 text-indigo-900 bg-indigo-100/50">Node Name</th>
+                        <th class="p-4 border-b border-black/5">Device Profile</th>
+                        <th class="p-4 border-b border-black/5">Installation Date</th>
+                        <th class="p-4 border-b border-black/5 text-rose-600">EOL</th>
+                        <th class="p-4 border-b border-black/5 text-rose-600">EOS</th>
+                        <th class="p-4 border-b border-black/5">AMC Details</th>
+                        <th class="p-4 border-b border-black/5 text-center">Age</th>
+                        <th class="p-4 border-b border-black/5 text-center bg-slate-100/50">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="text-[11px] font-medium text-slate-600 divide-y divide-black/5" id="foisTableBody">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="deleteModal" class="modal-overlay fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-100">
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600">
+                    <i class="fa-solid fa-trash-can text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Confirm Removal</h3>
+                    <p class="text-xs text-slate-500">Provide a reason to remove this record from FOIS.</p>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Remarks / Reason</label>
+                    <textarea id="deleteReason" rows="3" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition" placeholder="e.g. Obsolete hardware, site closed..."></textarea>
+                </div>
+                
+                <div class="flex space-x-3 pt-2">
+                    <button onclick="closeModal()" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition uppercase tracking-widest">
+                        Cancel
+                    </button>
+                    <button id="confirmDeleteBtn" class="flex-1 px-4 py-3 rounded-xl bg-rose-600 text-xs font-bold text-white hover:bg-rose-700 transition shadow-lg shadow-rose-200 uppercase tracking-widest">
+                        Delete Record
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const fullExcelData = [
+            { sr: 1, zone: "WR", div: "BRC", cat: "ROUTER", tier: "Tier 3", node: "PRTN-R1", profile: "HP MSR3044", install: "10-10-2019", eol: "09-10-2027", eos: "09-10-2027", amc: "Maintain by KWS", age: "8" },
+            { sr: 2, zone: "WR", div: "BRC", cat: "ROUTER", tier: "Tier 3", node: "PRTN-R2", profile: "HP MSR3044", install: "10-10-2019", eol: "09-10-2027", eos: "09-10-2027", amc: "Maintain by GNFCBH", age: "8" },
+            { sr: 3, zone: "WR", div: "BRC", cat: "ROUTER", tier: "Non_Tier-1", node: "RNO", profile: "CISCO 1841", install: "27-02-2024", eol: "20-02-1930", eos: "20-02-1930", amc: "Maintain by KWS", age: "8" },
+            { sr: 4, zone: "WR", div: "BRC", cat: "ROUTER", tier: "Non_Tier-1", node: "GSFCBJ-W", profile: "CISCO 2921", install: "02-05-2024", eol: "01-05-2032", eos: "01-05-2032", amc: "Maintain by GSFCBJ/W", age: "6" },
+            { sr: 5, zone: "WR", div: "BRC", cat: "ROUTER", tier: "Non_Tier-1", node: "GNFCBH", profile: "CISCO 2921", install: "13-10-2023", eol: "12-10-1931", eos: "12-10-1931", amc: "Maintain by GNFCBH", age: "8" },
+            { sr: 6, zone: "WR", div: "BRC", cat: "ROUTER", tier: "Non_Tier-1", node: "KWS-FOIS", profile: "CISCO ISR4431", install: "23-10-2022", eol: "22-03-2030", eos: "22-03-2030", amc: "Maintain by KWS", age: "8" },
+            { sr: 7, zone: "WR", div: "BRC", cat: "ROUTER", tier: "Non_Tier-1", node: "KBCS", profile: "CISCO 1921", install: "06-07-2023", eol: "05-07-2031", eos: "05-07-2031", amc: "Maintain by KBCS", age: "8" },
+            { sr: 8, zone: "WR", div: "BRC", cat: "ROUTER", tier: "Non_Tier-1", node: "KRLL", profile: "CISCO 1905", install: "11-09-2022", eol: "10-09-2030", eos: "10-09-2030", amc: "Renew every year", age: "8" }
+        ];
+
+        let targetIndex = null;
+        const tableBody = document.getElementById('foisTableBody');
+        const modal = document.getElementById('deleteModal');
+
+        function renderTable() {
+            tableBody.innerHTML = '';
+            fullExcelData.forEach((item, index) => {
+                const row = document.createElement('tr');
+                row.className = "border-l-4 border-transparent hover:border-indigo-500 transition-all";
+                
+                const tierBadge = item.tier.includes('Tier 3') 
+                    ? '<span class="text-amber-700 bg-amber-100 px-2 py-0.5 rounded border border-amber-200">Tier 3</span>' 
+                    : '<span class="text-cyan-700 bg-cyan-100 px-2 py-0.5 rounded border border-cyan-200">Non-Tier 1</span>';
+
+                row.innerHTML = `
+                    <td class="p-4 font-mono text-slate-400 text-center">${item.sr}</td>
+                    <td class="p-4 font-bold text-slate-800">${item.zone}</td>
+                    <td class="p-4">${item.div}</td>
+                    <td class="p-4 text-indigo-600 font-bold text-[9px] uppercase"><i class="fa-solid fa-server mr-1"></i> ${item.cat}</td>
+                    <td class="p-4">${tierBadge}</td>
+                    <td class="p-4 font-black text-slate-900 bg-indigo-50/50">${item.node}</td>
+                    <td class="p-4 text-slate-500 font-semibold">${item.profile}</td>
+                    <td class="p-4 font-mono text-slate-500">${item.install}</td>
+                    <td class="p-4 font-mono text-rose-600 font-semibold">${item.eol}</td>
+                    <td class="p-4 font-mono text-rose-600 font-semibold">${item.eos}</td>
+                    <td class="p-4 text-[10px] text-slate-500 italic">${item.amc}</td>
+                    <td class="p-4 text-center"><span class="bg-indigo-600 text-white px-2 py-1 rounded-full text-[9px] font-bold">${item.age}Y</span></td>
+                    <td class="p-4 text-center bg-slate-50/50">
+                        <div class="flex items-center justify-center space-x-2">
+                            <button onclick="modifyRecord(${index})" class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-indigo-600 hover:bg-indigo-600 hover:text-white transition shadow-sm">
+                                <i class="fa-solid fa-pen-to-square"></i>
+                            </button>
+                            <button onclick="confirmRemoval(${index})" class="w-8 h-8 rounded-lg bg-white border border-slate-200 text-rose-600 hover:bg-rose-600 hover:text-white transition shadow-sm">
+                                <i class="fa-solid fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Logic Functions
+        function modifyRecord(idx) {
+            alert(`Opening Modify form for node: ${fullExcelData[idx].node}`);
+        }
+
+        function confirmRemoval(idx) {
+            targetIndex = idx;
+            document.getElementById('deleteReason').value = '';
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            targetIndex = null;
+        }
+
+        document.getElementById('confirmDeleteBtn').addEventListener('click', () => {
+            const reason = document.getElementById('deleteReason').value.trim();
+            if (!reason) {
+                alert("Please enter a reason for deletion to maintain audit logs.");
+                return;
+            }
+            
+            // Console log simulation of data being sent to server with reason
+            console.log(`LOG: Node ${fullExcelData[targetIndex].node} deleted by admin. Reason: ${reason}`);
+            
+            fullExcelData.splice(targetIndex, 1);
+            renderTable();
+            closeModal();
+        });
+
+        // Initial Load
+        renderTable();
+    </script>
+</body>
+</html>
