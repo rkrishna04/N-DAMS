@@ -1,1 +1,186 @@
-
+<main class="max-w-[1280px] mx-auto px-6 lg:px-12 py-8">
+<!-- Breadcrumbs -->
+<div class="flex items-center gap-2 mb-6">
+<a class="text-[#5a878c] dark:text-gray-400 text-xs font-semibold uppercase tracking-wider hover:text-primary" href="#">Settings</a>
+<span class="material-symbols-outlined text-xs text-[#5a878c]">chevron_right</span>
+<span class="text-[#101819] dark:text-white text-xs font-bold uppercase tracking-wider">Profile Management</span>
+</div>
+<!-- Page Heading -->
+<div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div>
+<h1 class="text-[#101819] dark:text-white text-4xl font-black tracking-tight mb-2">Manage Profile</h1>
+<p class="text-[#5a878c] dark:text-gray-400 text-base max-w-xl">Configure your professional identity, contact details, and account security preferences.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-5 py-2.5 rounded-lg border border-[#e9f0f1] dark:border-white/10 text-sm font-bold hover:bg-[#e9f0f1] dark:hover:bg-white/5 transition-all">Discard</button>
+<button class="px-5 py-2.5 rounded-lg bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:bg-primary/90 transition-all">Save Changes</button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Left Sidebar Navigation -->
+<aside class="lg:col-span-3 space-y-6">
+<!-- Profile Identity Card -->
+<div class="bg-white dark:bg-white/5 p-6 rounded-xl border border-[#e9f0f1] dark:border-white/10">
+<div class="flex flex-col items-center text-center">
+<div class="relative group">
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-32 border-4 border-background-light dark:border-background-dark shadow-xl" data-alt="John Doe professional headshot" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAZ-LjaqbNQvln1tYEFqqlQscH7pMZn8kDhQVK3E-H4DAxnYKnoUoBBX4cR26x90tVku5XjRj8xrWg1Do91j1ovZsEERBkPfRBDoE112QCfIjxcNpVAkR_sM35EZMoG9Aq5xXVIp1eDzHhfxczSzWs2rn7C-0vMOzyr9VDhxXfnW-dqkt3mQLMNCvwAUskgNcNlllOHYPVbHqdNW7sbNRVTCOgZG2TtIYcrb5dkoGJJ5cJR88GL5jufQpMi4pqw7fCgDQLS8MIgOqQ");'></div>
+<button class="absolute bottom-1 right-1 bg-primary text-white p-2 rounded-full shadow-lg hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-sm">photo_camera</span>
+</button>
+</div>
+<h3 class="mt-4 text-xl font-bold dark:text-white">John Doe</h3>
+<p class="text-sm text-[#5a878c] dark:text-gray-400 font-medium">Senior Product Manager</p>
+<div class="mt-2 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400">
+                            Active Account
+                        </div>
+</div>
+</div>
+<!-- Vertical Nav -->
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg bg-primary/10 text-primary dark:bg-primary/20 dark:text-primary-light font-bold" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="text-sm">General Profile</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#5a878c] hover:bg-white dark:hover:bg-white/5 transition-all font-semibold" href="#">
+<span class="material-symbols-outlined">mail</span>
+<span class="text-sm">Contact Preferences</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#5a878c] hover:bg-white dark:hover:bg-white/5 transition-all font-semibold" href="#">
+<span class="material-symbols-outlined">lock</span>
+<span class="text-sm">Security &amp; Privacy</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 rounded-lg text-[#5a878c] hover:bg-white dark:hover:bg-white/5 transition-all font-semibold" href="#">
+<span class="material-symbols-outlined">notifications</span>
+<span class="text-sm">Notifications</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<div class="lg:col-span-9 space-y-8">
+<!-- Personal Details Section -->
+<section class="bg-white dark:bg-white/5 rounded-xl border border-[#e9f0f1] dark:border-white/10 overflow-hidden">
+<div class="px-8 py-5 border-b border-[#e9f0f1] dark:border-white/10 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">badge</span>
+<h2 class="text-lg font-bold">Personal Details</h2>
+</div>
+</div>
+<div class="p-8 grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">First Name</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" type="text" value="John"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">Surname</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" type="text" value="Doe"/>
+</div>
+<div class="space-y-2 md:col-span-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">Post / Designation</label>
+<div class="relative">
+<input class="w-full px-4 py-2.5 pl-10 rounded-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" type="text" value="Senior Product Manager"/>
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-[#5a878c] text-xl">work</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Contact Information Section -->
+<section class="bg-white dark:bg-white/5 rounded-xl border border-[#e9f0f1] dark:border-white/10 overflow-hidden">
+<div class="px-8 py-5 border-b border-[#e9f0f1] dark:border-white/10">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">contact_mail</span>
+<h2 class="text-lg font-bold">Contact Information</h2>
+</div>
+</div>
+<div class="p-8 space-y-8">
+<!-- Email Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider flex justify-between">
+                                    Primary Email
+                                    <span class="text-primary font-bold lowercase tracking-normal flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">verified</span> Verified
+                                    </span>
+</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-[#e9f0f1] dark:border-white/10 bg-[#f1f4f5] dark:bg-white/5 text-[#5a878c] cursor-not-allowed" readonly="" type="email" value="john.doe@enterprise.com"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">Secondary Email</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="personal.email@example.com" type="email"/>
+</div>
+</div>
+<!-- Phone Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-6">
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">Primary Phone Number</label>
+<div class="flex">
+<span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-[#e9f0f1] dark:border-white/10 bg-[#e9f0f1] dark:bg-white/10 text-sm font-bold">+1</span>
+<input class="w-full px-4 py-2.5 rounded-r-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" type="tel" value="(555) 012-3456"/>
+</div>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">Secondary Phone Number</label>
+<div class="flex">
+<span class="inline-flex items-center px-3 rounded-l-lg border border-r-0 border-[#e9f0f1] dark:border-white/10 bg-[#e9f0f1] dark:bg-white/10 text-sm font-bold">+1</span>
+<input class="w-full px-4 py-2.5 rounded-r-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="(555) 000-0000" type="tel"/>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Security Section -->
+<section class="bg-white dark:bg-white/5 rounded-xl border border-[#e9f0f1] dark:border-white/10 overflow-hidden shadow-sm">
+<div class="px-8 py-5 border-b border-[#e9f0f1] dark:border-white/10 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">security</span>
+<h2 class="text-lg font-bold">Password &amp; Security</h2>
+</div>
+<button class="text-primary text-sm font-bold hover:underline">Manage 2FA</button>
+</div>
+<div class="p-8">
+<div class="flex flex-col md:flex-row gap-8 items-start">
+<div class="flex-1 space-y-6 w-full">
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">Current Password</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" placeholder="••••••••••••" type="password"/>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">New Password</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" type="password"/>
+</div>
+<div class="space-y-2">
+<label class="text-xs font-bold text-[#5a878c] uppercase tracking-wider">Confirm New Password</label>
+<input class="w-full px-4 py-2.5 rounded-lg border border-[#e9f0f1] dark:border-white/10 bg-background-light dark:bg-background-dark focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all" type="password"/>
+</div>
+</div>
+</div>
+<div class="w-full md:w-64 p-4 rounded-lg bg-[#fdf2f2] dark:bg-red-900/10 border border-red-100 dark:border-red-900/20">
+<h4 class="text-xs font-black text-red-800 dark:text-red-400 uppercase mb-3">Password Requirements</h4>
+<ul class="space-y-2">
+<li class="flex items-center gap-2 text-[11px] text-red-800/80 dark:text-red-400/80">
+<span class="material-symbols-outlined text-sm">check_circle</span> At least 12 characters
+                                    </li>
+<li class="flex items-center gap-2 text-[11px] text-red-800/80 dark:text-red-400/80">
+<span class="material-symbols-outlined text-sm">radio_button_unchecked</span> Include numbers &amp; symbols
+                                    </li>
+<li class="flex items-center gap-2 text-[11px] text-red-800/80 dark:text-red-400/80">
+<span class="material-symbols-outlined text-sm">radio_button_unchecked</span> Upper &amp; lowercase
+                                    </li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- Danger Zone (Extra flair) -->
+<section class="p-8 bg-red-50/30 dark:bg-red-900/5 rounded-xl border border-dashed border-red-200 dark:border-red-900/20 flex flex-col md:flex-row md:items-center justify-between gap-6">
+<div>
+<h3 class="text-red-800 dark:text-red-400 font-extrabold">Deactivate Account</h3>
+<p class="text-sm text-red-800/70 dark:text-red-400/70">Temporarily disable your profile. You can reactivate at any time through support.</p>
+</div>
+<button class="px-6 py-2.5 bg-white dark:bg-background-dark border border-red-200 dark:border-red-900/30 text-red-800 dark:text-red-400 text-sm font-bold rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-all">
+                        Deactivate
+                    </button>
+</section>
+</div>
+</div>
+</main>
