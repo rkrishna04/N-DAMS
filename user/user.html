@@ -3,148 +3,191 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard | Command Mode</title>
+    <title>NOCC ROOT | Command Center</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Modern White Galaxy Button Styling */
-        .module-btn {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(0, 0, 0, 0.05);
+        :root {
+            --ir-blue: #003399;
+            --ir-gold: #FFD700;
+            --sidebar-width: 288px;
+            --sidebar-min-width: 80px;
+        }
+
+        .sidebar {
+            background-color: var(--ir-blue);
+            width: var(--sidebar-width);
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             position: relative;
-            overflow: hidden;
+        }
+
+        /* Minimized State */
+        .sidebar.minimized { width: var(--sidebar-min-width); }
+        .sidebar.minimized .nav-text, 
+        .sidebar.minimized .sidebar-header-text,
+        .sidebar.minimized .user-details,
+        .sidebar.minimized .section-label { display: none; }
+        
+        .sidebar.minimized .nav-item { justify-content: center; padding-left: 0; padding-right: 0; }
+        .sidebar.minimized .sidebar-header { justify-content: center; padding: 1.5rem 0; }
+
+        .nav-item {
+            border-left: 4px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255, 255, 255, 0.1);
+            border-left-color: var(--ir-gold);
+            color: white;
+        }
+
+        .module-btn {
+            background: white;
+            border: 1px solid rgba(0, 0, 0, 0.08);
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .module-btn::before {
-            content: '';
-            position: absolute;
-            top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(99, 102, 241, 0.1), transparent);
-            transition: 0.5s;
-        }
-
-        .module-btn:hover::before { left: 100%; }
-
         .module-btn:hover {
             transform: scale(1.05);
-            border-color: #6366f1;
-            background: #ffffff;
-            box-shadow: 0 10px 25px -5px rgba(99, 102, 241, 0.1);
+            border-color: var(--ir-blue);
+            box-shadow: 0 15px 30px -10px rgba(0, 51, 153, 0.15);
         }
 
-        /* Hover Glow Colors */
-        .glow-blue:hover i { color: #2563eb; }
-        .glow-purple:hover i { color: #7c3aed; }
-        .glow-emerald:hover i { color: #059669; }
+        /* Header Logo - Only shows when sidebar is minimized */
+        #header-logo {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+        .sidebar.minimized ~ .main-content #header-logo { display: flex; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: translateX(0); } }
     </style>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
+<body class="bg-gray-50 flex h-screen overflow-hidden">
 
-    <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-6 sticky top-0 z-50">
-        <div class="flex items-center space-x-2">
-                <i class="fa-solid fa-microchip text-blue-500 text-xl"></i>
-            <span class="text-xl font-bold text-slate-800 tracking-tight">NOCC ROOT</span>
-        </div>
-
-        <div class="hidden md:flex flex-1 max-w-md mx-8">
-            <div class="relative w-full">
-                <span class="absolute inset-y-0 left-0 flex items-center pl-3">
-                    <i class="fa-solid fa-magnifying-glass text-slate-400 text-sm"></i>
-                </span>
-                <input type="text" placeholder="Search records..." 
-                       class="w-full bg-slate-100 border-transparent rounded-full py-2 pl-10 pr-4 focus:bg-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all text-sm">
+    <aside id="sidebar" class="sidebar flex flex-col flex-shrink-0 z-20">
+        <div class="sidebar-header p-6 flex items-center space-x-3 border-b border-blue-900/50">
+            <div class="bg-white p-2 rounded-lg shadow-lg flex-shrink-0">
+                <i class="fa-solid fa-train-subway text-[#003399] text-xl"></i>
+            </div>
+            <div class="sidebar-header-text overflow-hidden">
+                <h2 class="text-white font-black tracking-tighter text-lg leading-none">NOCC ROOT</h2>
+                <p class="text-blue-300 text-[10px] uppercase font-bold tracking-widest mt-1">Indian Railways</p>
             </div>
         </div>
 
-        <div class="flex items-center space-x-4">
-            <span class="hidden sm:inline text-sm font-medium text-slate-600">test demo</span>
-            <button class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center border-2 border-white shadow-sm hover:bg-slate-300 transition">
-                <i class="fa-solid fa-user text-slate-600"></i>
-            </button>
-        </div>
-    </header>
+        <button onclick="toggleSidebar()" class="absolute -right-3 top-20 bg-white border border-slate-200 rounded-full w-6 h-6 flex items-center justify-center text-[10px] text-blue-900 shadow-md hover:bg-blue-50 transition-all z-30">
+            <i id="toggle-icon" class="fa-solid fa-chevron-left"></i>
+        </button>
 
-    <div class="flex flex-1">
-        <main class="flex-1 p-8">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-2xl font-bold text-slate-800">NOCC Data Analyzer & Management System</h1>
-                <span class="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-medium">
-                    <i class="fa-solid fa-lock mr-1"></i> View Only Mode
+        <nav class="flex-1 mt-6 px-3 space-y-1">
+            <p class="section-label text-blue-400 text-[10px] font-bold uppercase px-4 mb-2 tracking-[0.2em]">Management</p>
+            <a href="#" class="nav-item active flex items-center space-x-3 py-3 px-4 rounded-lg text-white" title="Modules Hub">
+                <i class="fa-solid fa-layer-group w-5 flex-shrink-0"></i>
+                <span class="nav-text text-sm font-bold">Data Modules Hub</span>
+            </a>
+            <a href="#" class="nav-item flex items-center space-x-3 py-3 px-4 rounded-lg text-blue-100/70 hover:text-white" title="Scan Copies">
+                <i class="fa-solid fa-copy w-5 flex-shrink-0"></i>
+                <span class="nav-text text-sm font-bold">Scan Copies</span>
+            </a>
+        </nav>
+
+        <div class="p-4 bg-black/10 border-t border-blue-900/50">
+            <div class="flex items-center space-x-3 p-2">
+                <div class="w-8 h-8 rounded-full bg-blue-500 border border-blue-300 flex items-center justify-center text-white font-bold text-xs flex-shrink-0">AD</div>
+                <div class="user-details flex-1 overflow-hidden">
+                    <p class="text-xs font-bold text-white truncate">ABC abc</p>
+                    <p class="text-[9px] text-blue-300 uppercase">Admin</p>
+                </div>
+                <i class="fa-solid fa-right-from-bracket text-blue-400 cursor-pointer hover:text-red-400"></i>
+            </div>
+        </div>
+    </aside>
+
+    <div class="main-content flex-1 flex flex-col min-w-0">
+        <header class="bg-white border-b border-slate-200 h-16 flex items-center justify-between px-8 z-10">
+            <div class="flex items-center space-x-4">
+                <div id="header-logo" class="items-center space-x-3 mr-4">
+                    <i class="fa-solid fa-train-subway text-[#003399] text-xl"></i>
+                    <span class="font-black text-slate-800 tracking-tight">NOCC ROOT</span>
+                </div>
+                <h1 class="text-lg font-black text-slate-800 uppercase tracking-tight hidden md:block">Data Modules Hub</h1>
+                <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded text-[10px] font-black uppercase tracking-widest">
+                    Live
                 </span>
             </div>
+            
+            <div class="flex items-center space-x-6">
+                <div class="relative w-48">
+                    <i class="fa-solid fa-search absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-[10px]"></i>
+                    <input type="text" placeholder="Search..." class="w-full bg-slate-100 rounded-full py-1.5 pl-8 pr-4 text-xs focus:ring-1 focus:ring-blue-500 outline-none">
+                </div>
+                <div class="text-right font-mono">
+                    <div id="header-clock" class="text-slate-800 font-bold text-sm leading-none">00:00:00</div>
+                    <div id="header-date" class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">24 FEB 2026</div>
+                </div>
+            </div>
+        </header>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <p class="text-slate-500 text-sm">Total Links</p>
-                    <h3 class="text-3xl font-bold text-slate-800">24</h3>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <p class="text-slate-500 text-sm">Recently Viewed</p>
-                    <h3 class="text-3xl font-bold text-slate-800">3</h3>
-                </div>
-                <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                    <p class="text-slate-500 text-sm">History</p>
-                    <h3 class="text-3xl font-bold text-slate-800">12</h3>
+        <main class="flex-1 overflow-y-auto p-8 bg-gray-50">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Total Modules</p>
+                    <h3 class="text-2xl font-black text-slate-800">24</h3>
                 </div>
             </div>
 
             <section class="mb-12">
                 <div class="flex items-center space-x-4 mb-8">
                     <div class="h-px w-full bg-gradient-to-r from-indigo-500/30 to-transparent"></div>
-                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-indigo-500 whitespace-nowrap">Quick Module Access</h2>
+                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-indigo-500 whitespace-nowrap">Technical & Assets Position Module Access</h2>
                     <div class="h-px w-full bg-gradient-to-r from-transparent to-indigo-500/30"></div>
                 </div>
-
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5" id="moduleGrid">
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-6" id="moduleGrid"></div>
             </section>
         </main>
     </div>
-
-    <footer class="bg-white border-t border-slate-200 py-6 px-8">
-        <div class="flex flex-col md:flex-row justify-between items-center text-sm text-slate-500 space-y-4 md:space-y-0">
-            <p>&copy; 2026 N-DAMS. All rights reserved.</p>
-            <div class="flex space-x-6">
-                <a href="#" class="hover:text-blue-600 transition">Contact Support</a>
-            </div>
-        </div>
-    </footer>
-
     <script>
-        // Module configuration matching your list
-        const modules = [
-            'FOIS', 'EARTH', 'FC', 'TCS', 'UTS', 'PRS', 'COIS', 'ICMS', 'CMS', 'RMS',
-            'SATS', 'BMS', 'LMS', 'VMS', 'NMS', 'TMS', 'ZMS', 'GMS', 'FMS', 'WMS',
-            'CORE', 'NODE', 'LINK', 'SITE'
-        ];
+        // Sidebar Toggle Logic
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const icon = document.getElementById('toggle-icon');
+            sidebar.classList.toggle('minimized');
+            
+            if (sidebar.classList.contains('minimized')) {
+                icon.classList.replace('fa-chevron-left', 'fa-chevron-right');
+            } else {
+                icon.classList.replace('fa-chevron-right', 'fa-chevron-left');
+            }
+        }
 
+        // Live Clock Logic
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('header-clock').textContent = now.toLocaleTimeString('en-GB');
+            document.getElementById('header-date').textContent = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Render Modules
+        const modules = ['FOIS', 'EARTH', 'FC', 'TCS', 'UTS', 'PRS', 'COIS', 'ICMS', 'CMS', 'RMS', 'SATS', 'BMS', 'LMS', 'VMS', 'NMS', 'TMS', 'ZMS', 'GMS', 'FMS', 'WMS', 'CORE', 'NODE', 'LINK', 'SITE'];
         const grid = document.getElementById('moduleGrid');
         
         modules.forEach((mod) => {
             const btn = document.createElement('button');
-            
-            // Randomly assign a subtle color theme for icons
-            const themes = [
-                {color: 'text-blue-500', glow: 'glow-blue'},
-                {color: 'text-purple-500', glow: 'glow-purple'},
-                {color: 'text-emerald-500', glow: 'glow-emerald'}
-            ];
-            const theme = themes[Math.floor(Math.random() * themes.length)];
-
-            btn.className = `module-btn py-7 px-4 rounded-2xl flex flex-col items-center justify-center space-y-3 group ${theme.glow}`;
-            
-            // Link logic (Modify as needed)
-            btn.onclick = () => window.location.href = `module-${mod.toLowerCase()}.html`;
-            
+            btn.className = `module-btn py-6 px-4 rounded-2xl flex flex-col items-center justify-center space-y-3 group`;
             btn.innerHTML = `
-                <i class="fa-solid fa-atom ${theme.color} text-2xl group-hover:rotate-180 transition-transform duration-700"></i>
-                <span class="text-[11px] font-black tracking-widest text-slate-800 group-hover:text-indigo-600 transition-colors uppercase">${mod}</span>
-            `;
+                <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center group-hover:bg-blue-600 transition-colors duration-300">
+                    <i class="fa-solid fa-microchip text-blue-600 text-xl group-hover:text-white transition-all duration-500"></i>
+                </div>
+                <div class="text-center">
+                    <span class="text-xs font-black tracking-widest text-slate-800 group-hover:text-blue-700 uppercase block">${mod}</span>
+                    <p class="text-[9px] font-black text-slate-400 mt-2">24 FEB | 12:30 HRS</p>
+                </div>`;
             grid.appendChild(btn);
         });
     </script>
 </body>
-
 </html>
