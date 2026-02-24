@@ -1,1 +1,287 @@
+<!DOCTYPE html>
 
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PDF Document Library Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ea2a33",
+                        "background-light": "#f8f6f6",
+                        "background-dark": "#211111",
+                    },
+                    fontFamily: {
+                        "display": ["Public Sans", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: "Public Sans", sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 10px;
+        }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#181111] dark:text-white min-h-screen flex flex-col">
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-50 flex items-center justify-between border-b border-[#e5dcdc] dark:border-[#3d2b2b] bg-white dark:bg-[#2a1a1a] px-6 py-3">
+<div class="flex items-center gap-4">
+<div class="flex items-center justify-center size-10 rounded-lg bg-primary text-white">
+<span class="material-symbols-outlined">folder_managed</span>
+</div>
+<div>
+<h2 class="text-[#181111] dark:text-white text-lg font-bold leading-tight tracking-tight">Enterprise Solutions</h2>
+<p class="text-xs text-[#886364] dark:text-[#a18889]">Document Library Management</p>
+</div>
+</div>
+<div class="flex flex-1 justify-end gap-4 max-w-2xl">
+<label class="flex flex-col flex-1 h-10">
+<div class="flex w-full flex-1 items-stretch rounded-lg h-full border border-[#e5dcdc] dark:border-[#3d2b2b]">
+<div class="text-[#886364] flex bg-[#f4f0f0] dark:bg-[#3d2b2b] items-center justify-center pl-4 rounded-l-lg" data-icon="search">
+<span class="material-symbols-outlined text-xl">search</span>
+</div>
+<input class="form-input flex w-full min-w-0 flex-1 border-none bg-[#f4f0f0] dark:bg-[#3d2b2b] text-[#181111] dark:text-white focus:ring-0 placeholder:text-[#886364] px-4 rounded-r-lg text-sm font-normal" placeholder="Search by filename, date, or status..." value=""/>
+</div>
+</label>
+<button class="flex items-center justify-center rounded-lg h-10 w-10 bg-[#f4f0f0] dark:bg-[#3d2b2b] text-[#181111] dark:text-white hover:bg-primary/10 transition-colors">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10 border-2 border-primary/20" data-alt="User profile avatar portrait" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDSpMjBM9pdCZ6xZ-sQiBryDOkWh-bAo4gYaPtIDC3qINcype_SvkDevM2Z52W52SQ43891wHiIkPdyC6fI-jMz0UK-GcI5hVs8h4pyCh0tN3ihxyqksMS9c0rgY2lV5tG52XjUO9Myr1AW5cfWkfvmBWDfyma7XJ_ilqbHxGS1TOV8iygA8N55ILTb93vr1NCW9j4ziKCOkuut6RrZdoMnPUj9oPvfrXBi67x6KMqA-bHNJLq7eILN2WrB_k0OB4ya99q6IBZMJp4");'></div>
+</div>
+</header>
+<div class="flex flex-1 overflow-hidden">
+<!-- Sidebar Navigation -->
+<aside class="w-64 border-r border-[#e5dcdc] dark:border-[#3d2b2b] bg-white dark:bg-[#2a1a1a] flex flex-col justify-between p-4 hidden md:flex">
+<div class="flex flex-col gap-6">
+<div class="space-y-1">
+<p class="px-3 text-[10px] font-bold uppercase tracking-widest text-[#886364] mb-2">Main Menu</p>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary text-white shadow-lg shadow-primary/20" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<p class="text-sm font-semibold">Dashboard</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#181111] dark:text-[#f4f0f0] hover:bg-[#f4f0f0] dark:hover:bg-[#3d2b2b] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="database">database</span>
+<p class="text-sm font-medium">Data Management</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#181111] dark:text-[#f4f0f0] hover:bg-[#f4f0f0] dark:hover:bg-[#3d2b2b] transition-all" href="#">
+<span class="material-symbols-outlined" data-icon="share">share</span>
+<p class="text-sm font-medium">Shared Files</p>
+</a>
+</div>
+<div class="space-y-1">
+<p class="px-3 text-[10px] font-bold uppercase tracking-widest text-[#886364] mb-2">Filters</p>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#181111] dark:text-[#f4f0f0] hover:bg-[#f4f0f0] dark:hover:bg-[#3d2b2b]" href="#">
+<span class="material-symbols-outlined text-primary">description</span>
+<p class="text-sm">Recent Reports</p>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#181111] dark:text-[#f4f0f0] hover:bg-[#f4f0f0] dark:hover:bg-[#3d2b2b]" href="#">
+<span class="material-symbols-outlined text-primary">scan</span>
+<p class="text-sm">Scanned Archive</p>
+</a>
+</div>
+</div>
+<div class="bg-[#f4f0f0] dark:bg-[#3d2b2b] rounded-xl p-4">
+<div class="flex items-center justify-between mb-2">
+<p class="text-xs font-bold text-[#181111] dark:text-white">Storage</p>
+<p class="text-[10px] text-[#886364]">82% Full</p>
+</div>
+<div class="w-full bg-[#e5dcdc] dark:bg-[#211111] h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[82%]"></div>
+</div>
+<button class="mt-3 w-full py-2 bg-white dark:bg-[#2a1a1a] text-xs font-bold rounded-lg border border-[#e5dcdc] dark:border-[#181111] hover:border-primary transition-colors">Upgrade Plan</button>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 overflow-y-auto custom-scrollbar bg-background-light dark:bg-background-dark">
+<div class="max-w-[1200px] mx-auto p-8">
+<!-- Section Header -->
+<div class="flex items-end justify-between mb-6">
+<div>
+<h1 class="text-[#181111] dark:text-white text-3xl font-bold tracking-tight">Document Library</h1>
+<p class="text-[#886364] dark:text-[#a18889] mt-1">Manage and preview your enterprise digital assets.</p>
+</div>
+<div class="flex gap-2">
+<button class="flex items-center gap-2 px-4 py-2 bg-white dark:bg-[#2a1a1a] border border-[#e5dcdc] dark:border-[#3d2b2b] rounded-lg text-sm font-bold hover:shadow-md transition-all">
+<span class="material-symbols-outlined text-lg">filter_list</span>
+                            Sort By
+                        </button>
+<button class="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-sm font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all">
+<span class="material-symbols-outlined text-lg">upload</span>
+                            Upload PDF
+                        </button>
+</div>
+</div>
+<!-- Navigation Tabs -->
+<div class="mb-8">
+<div class="flex border-b border-[#e5dcdc] dark:border-[#3d2b2b] gap-8">
+<a class="flex flex-col items-center justify-center border-b-2 border-primary text-primary pb-3 font-bold text-sm" href="#">
+                            All Documents
+                        </a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-[#886364] dark:text-[#a18889] pb-3 font-medium text-sm hover:text-[#181111] dark:hover:text-white transition-colors" href="#">
+                            Financial Reports
+                        </a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-[#886364] dark:text-[#a18889] pb-3 font-medium text-sm hover:text-[#181111] dark:hover:text-white transition-colors" href="#">
+                            Operations
+                        </a>
+<a class="flex flex-col items-center justify-center border-b-2 border-transparent text-[#886364] dark:text-[#a18889] pb-3 font-medium text-sm hover:text-[#181111] dark:hover:text-white transition-colors" href="#">
+                            Archive
+                        </a>
+</div>
+</div>
+<!-- Document Grid -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+<!-- Doc 1 -->
+<div class="group relative flex flex-col gap-3 p-3 bg-white dark:bg-[#2a1a1a] rounded-xl border border-transparent hover:border-primary/30 shadow-sm hover:shadow-xl transition-all cursor-pointer">
+<div class="absolute top-5 right-5 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+<button class="p-1.5 bg-white rounded-full shadow-lg text-primary hover:scale-110 transition-transform">
+<span class="material-symbols-outlined text-lg">open_in_full</span>
+</button>
+</div>
+<div class="relative w-full bg-[#f4f0f0] dark:bg-[#3d2b2b] aspect-[3/4] rounded-lg overflow-hidden border border-[#e5dcdc] dark:border-[#3d2b2b]">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Q4 Financial Report preview thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuAO-HNne8MuN31dP_4Yj-1FuA2Mq_v8NOjg5_YMmU0h_oDGb6LLjiAWHIMi362v3b5eg7eofDAIu7wOTbOnooxdcFvg9PAtDEFn0t6W6Z-IjeiumEg2tgsMzWUuwMAV7D5i25TdPplqM6OS_bcnjnVXRtzx7ZF_mvvMqKxIhqyZLaDWAv0RNmqxaMT7z_sIjoazFs1eeXRB-QeiP8HRAl_nbUDQsHVZ-aftcm3eWHg992t29Qx2RZUJXRWO9cWWsrrnlkR_cJZs5n8");'></div>
+</div>
+<div class="px-1">
+<h3 class="text-[#181111] dark:text-white text-sm font-bold truncate">Q4_Financial_Report_2023.pdf</h3>
+<div class="flex items-center justify-between mt-1">
+<p class="text-[#886364] dark:text-[#a18889] text-[11px] font-medium">Oct 24, 2023 • 2.4MB</p>
+</div>
+</div>
+</div>
+<!-- Doc 2 (Scan) -->
+<div class="group relative flex flex-col gap-3 p-3 bg-white dark:bg-[#2a1a1a] rounded-xl border border-transparent hover:border-primary/30 shadow-sm hover:shadow-xl transition-all cursor-pointer">
+<div class="absolute top-5 left-5 z-10">
+<span class="px-2 py-1 bg-primary text-white text-[10px] font-black uppercase rounded shadow-md">Scan Copy</span>
+</div>
+<div class="relative w-full bg-[#f4f0f0] dark:bg-[#3d2b2b] aspect-[3/4] rounded-lg overflow-hidden border border-[#e5dcdc] dark:border-[#3d2b2b]">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Invoice scan document thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBLBVJzqJFZ6plGt60OKqgOndVLDu71onJBN8JodJu3XFQpmzZH8DESh0dWYjxkZyLrsTCH6p6S9zJNitNwU6Xd-rNcXZ2UiQJb_sG9H8xHDylow1BYx4IZWxvfew-zWEXBbt45Qv_KcNt-H5RoFH5iPZHT402xF420xHvXGFIii9bzvhGg_WH6MR-7Ig9ugFUknVYcieoOM-A8Z30gHrdUyKA64I2WnkcaSExLTSRHcSPNC9N8vxnZ7pIsgixvLwPYr3IkQu3OT84");'></div>
+</div>
+<div class="px-1">
+<h3 class="text-[#181111] dark:text-white text-sm font-bold truncate">Invoice_Scan_A102.pdf</h3>
+<div class="flex items-center justify-between mt-1">
+<p class="text-[#886364] dark:text-[#a18889] text-[11px] font-medium">Sep 12, 2023 • 1.1MB</p>
+</div>
+</div>
+</div>
+<!-- Doc 3 -->
+<div class="group relative flex flex-col gap-3 p-3 bg-white dark:bg-[#2a1a1a] rounded-xl border border-transparent hover:border-primary/30 shadow-sm hover:shadow-xl transition-all cursor-pointer">
+<div class="relative w-full bg-[#f4f0f0] dark:bg-[#3d2b2b] aspect-[3/4] rounded-lg overflow-hidden border border-[#e5dcdc] dark:border-[#3d2b2b]">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Employee handbook cover preview" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDfQLRsXayea3kC778hFE9CAFXIYPIbdGB0uPSD3qUauaiz5iKRkKIeGy4c-fsSuos2xfP2J9oM5Comb9Nw18E7l7YOavpA0SuBSW6Le9pNKW0_wxsBeOMEDwRim5L96m6KHpXCyBfRH5fK_x1tjjuG1NytMxqhfRKa0w8dE4H1sQreDg6KarJx-9HZ7eAfQHINTKDm9MUVhumwPF33E3rda5U9RYT7FB29X3F0PdbK-HuoHo5gVloOGMP90GZ93uDtbMzBKZB43xY");'></div>
+</div>
+<div class="px-1">
+<h3 class="text-[#181111] dark:text-white text-sm font-bold truncate">Employee_Handbook_v2.pdf</h3>
+<div class="flex items-center justify-between mt-1">
+<p class="text-[#886364] dark:text-[#a18889] text-[11px] font-medium">Oct 05, 2023 • 5.8MB</p>
+</div>
+</div>
+</div>
+<!-- Doc 4 (Scan) -->
+<div class="group relative flex flex-col gap-3 p-3 bg-white dark:bg-[#2a1a1a] rounded-xl border border-transparent hover:border-primary/30 shadow-sm hover:shadow-xl transition-all cursor-pointer">
+<div class="absolute top-5 left-5 z-10">
+<span class="px-2 py-1 bg-primary text-white text-[10px] font-black uppercase rounded shadow-md">Scan Copy</span>
+</div>
+<div class="relative w-full bg-[#f4f0f0] dark:bg-[#3d2b2b] aspect-[3/4] rounded-lg overflow-hidden border border-[#e5dcdc] dark:border-[#3d2b2b]">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Compliance checklist scan thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuDdduNs0x3S2sXfiwsdTsHZNcYTbHkLGgjqExpnC9ZED4gI2nE0vahcAW7dRpBIzJPtC9PQ5PgE39J-URp__fYA3OCT7ICe3xK9UsFDW-l6wVrQ2vwLnlDrl-G_SE27s1ysUGg1vYundDFlwHG_Oy6o20uiO9GaL9m2aVsndGxk5x_X2El_B-jZZnzvvQDgcrjzelHnNcen2kSf3junBYvK20MY8pTtmBb-cMY3azyvwFeVif-sWNTVWS8VFi6uvGiZ3x8vdddz6sI");'></div>
+</div>
+<div class="px-1">
+<h3 class="text-[#181111] dark:text-white text-sm font-bold truncate">Compliance_Checklist.pdf</h3>
+<div class="flex items-center justify-between mt-1">
+<p class="text-[#886364] dark:text-[#a18889] text-[11px] font-medium">Oct 15, 2023 • 890KB</p>
+</div>
+</div>
+</div>
+<!-- Doc 5 -->
+<div class="group relative flex flex-col gap-3 p-3 bg-white dark:bg-[#2a1a1a] rounded-xl border border-transparent hover:border-primary/30 shadow-sm hover:shadow-xl transition-all cursor-pointer">
+<div class="relative w-full bg-[#f4f0f0] dark:bg-[#3d2b2b] aspect-[3/4] rounded-lg overflow-hidden border border-[#e5dcdc] dark:border-[#3d2b2b]">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Project Proposal document preview" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCtHRqR8Jd07iRveVUBHH0oNmxP4_Vq_dG_tSARjYNvKhC7k92fdrJ07XQuYgiCx4ZxbWYsD7pujKDVU7Nj5Hxwyu0jOSnv-huZYpqJS7yZ27GS3b4q8yrTSTQwShA8FxWipjq1tkG5bXJaUemKX8zafI7AVTnOsD8j-xjiwV8XVPK9tCSgiUXmhFieJZ93wiPsUvfrKOBUuXvfZw-zoVQ89NPGMrLxdDT5-qCxABFnTunWLtlTUULBTTHWG2CtqKjSn6fHgIk-uR0");'></div>
+</div>
+<div class="px-1">
+<h3 class="text-[#181111] dark:text-white text-sm font-bold truncate">Project_Proposal_Final.pdf</h3>
+<div class="flex items-center justify-between mt-1">
+<p class="text-[#886364] dark:text-[#a18889] text-[11px] font-medium">Oct 20, 2023 • 3.2MB</p>
+</div>
+</div>
+</div>
+<!-- Doc 6 -->
+<div class="group relative flex flex-col gap-3 p-3 bg-white dark:bg-[#2a1a1a] rounded-xl border border-transparent hover:border-primary/30 shadow-sm hover:shadow-xl transition-all cursor-pointer">
+<div class="relative w-full bg-[#f4f0f0] dark:bg-[#3d2b2b] aspect-[3/4] rounded-lg overflow-hidden border border-[#e5dcdc] dark:border-[#3d2b2b]">
+<div class="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" data-alt="Tax Returns filing thumbnail" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuCGqjtAPXyyw6YtkEFVuZcbTO1CTXpN8zAQh5gGz3GJRAYGPzyaCRGL_zPd57J8BONEui4KCv8NHYBSDVH5DyM0MaBniVEIHzivi24C8_mdFtLMo5hoCl50QZYmIBh3pHLhQqpnjIz-eoGge93zQ_nnjL_IXGT_OeAlEoNVgw5WN5WsYXZngJpuUljMnXWkVy1wAz8hYgkAGKPZy5IVGnLlWmjcYwy8zT1Na25bkhTP4fVgo5TlE6v64TBn8DuRdM97E9R-L7dRSAo");'></div>
+</div>
+<div class="px-1">
+<h3 class="text-[#181111] dark:text-white text-sm font-bold truncate">Tax_Returns_2022.pdf</h3>
+<div class="flex items-center justify-between mt-1">
+<p class="text-[#886364] dark:text-[#a18889] text-[11px] font-medium">Aug 30, 2023 • 4.5MB</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+<!-- Professional Footer -->
+<footer class="border-t border-[#e5dcdc] dark:border-[#3d2b2b] bg-white dark:bg-[#2a1a1a] px-6 py-4 flex items-center justify-between">
+<div class="flex items-center gap-6">
+<p class="text-[#886364] dark:text-[#a18889] text-xs font-medium">© 2023 Enterprise Solutions Inc. All rights reserved.</p>
+<div class="flex gap-4">
+<a class="text-[#886364] dark:text-[#a18889] text-xs hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="text-[#886364] dark:text-[#a18889] text-xs hover:text-primary transition-colors" href="#">Terms of Service</a>
+</div>
+</div>
+<div class="flex items-center gap-2">
+<span class="flex size-2 bg-green-500 rounded-full animate-pulse"></span>
+<p class="text-[#886364] dark:text-[#a18889] text-[10px] font-bold uppercase tracking-wider">System Version: 2.4.1-stable</p>
+</div>
+</footer>
+<!-- Simplified Modal Template (Hidden by default for visual mockup) -->
+
+    <div class="fixed inset-0 z-[100] flex items-center justify-center bg-[#181111]/80 backdrop-blur-sm">
+        <div class="bg-white dark:bg-[#211111] w-[90vw] h-[90vh] rounded-2xl flex flex-col overflow-hidden">
+            <div class="px-6 py-4 border-b border-[#e5dcdc] dark:border-[#3d2b2b] flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <span class="material-symbols-outlined text-primary">description</span>
+                    <h2 class="font-bold">Q4_Financial_Report_2023.pdf</h2>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button class="p-2 hover:bg-[#f4f0f0] rounded-lg"><span class="material-symbols-outlined">zoom_in</span></button>
+                    <button class="p-2 hover:bg-[#f4f0f0] rounded-lg"><span class="material-symbols-outlined">print</span></button>
+                    <button class="p-2 hover:bg-[#f4f0f0] rounded-lg"><span class="material-symbols-outlined">download</span></button>
+                    <div class="w-px h-6 bg-[#e5dcdc] mx-2"></div>
+                    <button class="p-2 hover:bg-[#f4f0f0] text-primary rounded-lg"><span class="material-symbols-outlined">close</span></button>
+                </div>
+            </div>
+            <div class="flex-1 bg-[#886364]/10 overflow-y-auto p-12 flex justify-center">
+                <div class="w-[800px] bg-white shadow-2xl min-h-[1100px] rounded-sm p-16">
+                     PDF Content Mockup
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</body></html>
