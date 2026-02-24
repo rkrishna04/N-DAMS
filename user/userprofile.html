@@ -8,6 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
         :root {
             --ir-blue: #003399;
             --ir-gold: #FFD700;
@@ -121,17 +127,18 @@
 
 <main class="max-w-[1280px] mx-auto px-6 lg:px-12 py-8">
 <!-- Breadcrumbs -->
-     <div class="flex items-center space-x-6">
-                <div class="text-right font-mono">
-                    <div id="header-clock" class="text-slate-800 font-bold text-sm leading-none">00:00:00</div>
-                    <div id="header-date" class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">24 FEB 2026</div>
-                </div>
-            </div>
+     
 
 <!-- Page Heading -->
 <div class="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
 <div>
 <h1 class="text-[#101819] dark:text-blue text-4xl font-black tracking-tight mb-2">Manage Profile</h1>
+    <div class="flex items-center space-x-6">
+                <div class="text-right font-mono">
+                    <div id="header-clock" class="text-slate-800 font-bold text-sm leading-none">00:00:00</div>
+                    <div id="header-date" class="text-[9px] text-slate-400 font-bold uppercase tracking-wider">24 FEB 2026</div>
+                </div>
+            </div>
 <p class="text-[#5a878c] dark:text-gray-400 text-base max-w-xl">Configure your professional identity, contact details, and account security preferences.</p>
 </div>
 <div class="flex gap-3">
@@ -308,6 +315,29 @@
 </div>
 </main>
 </div>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1a545b",
+                        "background-light": "#f6f8f8",
+                        "background-dark": "#131d1f",
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
 <script>
         // Sidebar Toggle Logic
         function toggleSidebar() {
