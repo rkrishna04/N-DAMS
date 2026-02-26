@@ -170,7 +170,7 @@
             btn.onclick = () => {
                 if(mod === 'FOIS') {
                     // Make sure this filename matches your FOIS detail page filename
-                    window.location.href = 'fois-details.html'; 
+                    window.location.href = 'fois_details.html'; 
                 } else {
                     // Default behavior for other modules
                     console.log(`Accessing ${mod} Module...`);
@@ -183,10 +183,11 @@
                 </div>
                 <div class="text-center">
                     <span class="text-xs font-black tracking-widest text-slate-800 group-hover:text-blue-700 uppercase block">${mod}</span>
-                    <p class="text-[9px] font-black text-slate-400 mt-2">24 FEB | ACTIVE</p>
+                    <p class="text-[9px] font-black text-slate-400 mt-2">24 FEB | 12:30 HRS</p>
                 </div>`;
             grid.appendChild(btn);
         });
     </script>
 </body>
 </html>
+
