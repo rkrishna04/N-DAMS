@@ -86,7 +86,35 @@
         </div>
     </div>
 
-    
+    <div id="deleteModal" class="modal-overlay fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[100] items-center justify-center p-4">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 border border-slate-100">
+            <div class="flex items-center space-x-4 mb-6">
+                <div class="w-12 h-12 bg-rose-100 rounded-2xl flex items-center justify-center text-rose-600">
+                    <i class="fa-solid fa-trash-can text-xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-lg font-bold text-slate-900">Confirm Removal</h3>
+                    <p class="text-xs text-slate-500">Provide a reason to remove this record from FOIS.</p>
+                </div>
+            </div>
+            
+                <div class="space-y-4">
+                    <div>
+                        <label class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block mb-1">Remarks / Reason</label>
+                        <textarea id="deleteReason" rows="3" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-4 focus:ring-rose-500/10 focus:border-rose-500 outline-none transition" placeholder="e.g. Obsolete hardware, site closed..."></textarea>
+                    </div>
+                    
+                    <div class="flex space-x-3 pt-2">
+                        <button onclick="closeModal()" class="flex-1 px-4 py-3 rounded-xl border border-slate-200 text-xs font-bold text-slate-600 hover:bg-slate-50 transition uppercase tracking-widest">
+                            Cancel
+                        </button>
+                        <button id="confirmDeleteBtn" class="flex-1 px-4 py-3 rounded-xl bg-rose-600 text-xs font-bold text-white hover:bg-rose-700 transition shadow-lg shadow-rose-200 uppercase tracking-widest">
+                            Delete Record
+                        </button>
+                    </div>
+                </div>
+        </div>
+    </div>
 
     <script>
         const fullExcelData = [
