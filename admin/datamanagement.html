@@ -69,10 +69,15 @@
         .glow-cyan:hover { box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); background: rgba(6, 182, 212, 0.15); }
         .glow-emerald:hover { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); background: rgba(16, 185, 129, 0.15); }
         
-        /* New Module Specific Style */
-        .add-btn {
-            border: 2px dashed rgba(99, 102, 241, 0.5);
-            background: rgba(99, 102, 241, 0.1);
+        /* Stylized Add Button */
+        .add-module-trigger {
+            border: 2px dashed rgba(129, 140, 248, 0.4);
+            background: rgba(129, 140, 248, 0.1);
+            cursor: pointer;
+        }
+        .add-module-trigger:hover {
+            border-color: rgba(129, 140, 248, 0.8);
+            background: rgba(129, 140, 248, 0.2);
         }
     </style>
 </head>
@@ -87,13 +92,29 @@
         </div>
         
         <nav class="space-y-3">
-            <a href="#" class="flex items-center space-x-3 p-3 bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 rounded-xl">
+            <a href="admin.html" class="flex items-center space-x-3 p-3 text-slate-400 hover:text-white transition">
                 <i class="fa-solid fa-rocket"></i>
-                <span class="text-sm font-medium">Management Hub</span>
+                <span class="text-sm">Management Hub</span>
             </a>
-            <button onclick="localStorage.clear(); location.reload();" class="flex items-center space-x-3 p-3 text-red-400/60 hover:text-red-400 transition w-full text-left">
-                <i class="fa-solid fa-trash-can"></i>
-                <span class="text-sm">Clear Custom Data</span>
+            <a href="datamanagement.html" class="flex items-center space-x-3 p-3 bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 rounded-xl">
+                <i class="fa-solid fa-database"></i>
+                <span class="text-sm font-medium">Data Management</span>
+            </a>
+            <a href="#" class="flex items-center space-x-3 p-3 text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-users"></i>
+                <span class="text-sm">Manage Users</span>
+            </a>            
+            <a href="#" class="flex items-center space-x-3 p-3 text-slate-400 hover:text-white transition">
+                <i class="fa-solid fa-file-invoice"></i>
+                <span class="text-sm">Reports & Analytics</span>
+            </a>  
+            <button onclick="localStorage.removeItem('user_modules'); location.reload();" class="flex items-center space-x-3 p-3 text-orange-300 hover:bg-orange-900/20 w-full rounded-lg transition">
+                <i class="fa-solid fa-rotate"></i>
+                <span>Reset Modules</span>
+            </button>
+            <button class="flex items-center space-x-3 p-3 text-red-300 hover:bg-red-900/20 w-full rounded-lg transition">
+                <i class="fa-solid fa-power-off"></i>
+                <span>Logout</span>
             </button>
         </nav>
     </aside>
@@ -117,16 +138,16 @@
             </div>
 
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5" id="moduleGrid">
-                <button onclick="addNewModule()" class="module-btn add-btn py-6 px-4 rounded-2xl flex flex-col items-center justify-center space-y-3 group">
-                    <i class="fa-solid fa-plus text-indigo-400 text-2xl group-hover:scale-125 transition-transform"></i>
-                    <span class="text-[10px] font-black tracking-widest text-indigo-300 uppercase">Add Module</span>
+                <button onclick="addUserModule()" class="module-btn add-module-trigger py-6 px-4 rounded-2xl flex flex-col items-center justify-center space-y-3 group">
+                    <i class="fa-solid fa-plus text-indigo-400 text-2xl group-hover:scale-125 transition-transform duration-300"></i>
+                    <span class="text-[10px] font-black tracking-widest text-indigo-300 uppercase">New Module</span>
                 </button>
             </div>
         </section>
     </main>
 
     <script>
-        // 1. Generate Stars
+        // 1. Generate Star Field
         const starField = document.getElementById('starField');
         for (let i = 0; i < 150; i++) {
             const star = document.createElement('div');
@@ -141,25 +162,27 @@
             starField.appendChild(star);
         }
 
-        // 2. Module Logic
-        const defaultModules = [
+        // 2. Module Configuration
+        const initialModules = [
             'FOIS', 'EARTH', 'FC', 'TCS', 'UTS', 'PRS', 'COIS', 'ICMS', 'CMS', 'RMS',
             'SATS', 'BMS', 'LMS', 'VMS', 'NMS', 'TMS', 'ZMS', 'GMS', 'FMS', 'WMS'
         ];
 
-        function renderModules() {
+        function loadModules() {
             const grid = document.getElementById('moduleGrid');
-            // Keep only the "Add Module" button
-            const addBtn = grid.querySelector('.add-btn');
+            
+            // Remove everything except the "Add Module" trigger
+            const trigger = grid.querySelector('.add-module-trigger');
             grid.innerHTML = '';
-            grid.appendChild(addBtn);
+            grid.appendChild(trigger);
 
-            // Get custom modules from storage
-            const customModules = JSON.parse(localStorage.getItem('custom_ndams')) || [];
-            const allModules = [...defaultModules, ...customModules];
+            // Merge initial list with user-created modules from localStorage
+            const userModules = JSON.parse(localStorage.getItem('user_modules')) || [];
+            const activeList = [...initialModules, ...userModules];
 
-            allModules.forEach((mod) => {
+            activeList.forEach((mod) => {
                 const btn = document.createElement('button');
+                
                 const themes = [
                     {color: 'text-blue-400', glow: 'glow-blue'},
                     {color: 'text-purple-400', glow: 'glow-purple'},
@@ -179,24 +202,24 @@
             });
         }
 
-        function addNewModule() {
-            const name = prompt("Enter New Module Name (e.g. SIGMA):");
-            if (name && name.trim() !== "") {
-                const customModules = JSON.parse(localStorage.getItem('custom_ndams')) || [];
-                const upperName = name.trim().toUpperCase();
+        function addUserModule() {
+            const modName = prompt("Enter Name for New Module:");
+            if (modName && modName.trim() !== "") {
+                const formattedName = modName.trim().toUpperCase();
+                let userModules = JSON.parse(localStorage.getItem('user_modules')) || [];
                 
-                if (!defaultModules.includes(upperName) && !customModules.includes(upperName)) {
-                    customModules.push(upperName);
-                    localStorage.setItem('custom_ndams', JSON.stringify(customModules));
-                    renderModules();
+                if (!initialModules.includes(formattedName) && !userModules.includes(formattedName)) {
+                    userModules.push(formattedName);
+                    localStorage.setItem('user_modules', JSON.stringify(userModules));
+                    loadModules();
                 } else {
-                    alert("Module already exists!");
+                    alert("Module name already exists.");
                 }
             }
         }
 
-        // Initial Load
-        renderModules();
+        // Initial render
+        loadModules();
     </script>
 </body>
 </html>
