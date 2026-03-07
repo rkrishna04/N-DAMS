@@ -3,122 +3,198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard | Management</title>
+    <title>Admin Dashboard | NOCC Management</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body class="bg-slate-50 flex">
+<body class="bg-slate-50">
+    <div id="root"></div>
 
-    <aside class="w-64 bg-indigo-900 h-screen sticky top-0 text-white p-6 hidden md:block">
-        <div class="mb-10">
-            <h2 class="text-2xl font-bold text-indigo-300">AdminPanel</h2>
-            <p class="text-xs text-indigo-400 uppercase tracking-widest">Administrative Access</p>
-        </div>
-        
-        <nav class="space-y-2">
-            <a href="#" class="flex items-center space-x-3 p-3 bg-indigo-700 rounded-lg shadow-inner">
-                <i class="fa-solid fa-gauge"></i>
-                <span>Management Hub</span>
-            </a>
-            <a href="datamanagement.html" class="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
-                <i class="fa-solid fa-file-invoice"></i>
-                <span>Data Management</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
-                <i class="fa-solid fa-users"></i>
-                <span>Manage Users</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
-                <i class="fa-solid fa-file-invoice"></i>
-                <span>Reports & Analytics</span>
-            </a>
-            <div class="pt-10 border-t border-indigo-800 mt-10">
-                <button class="flex items-center space-x-3 p-3 text-red-300 hover:bg-red-900/20 w-full rounded-lg transition">
-                    <i class="fa-solid fa-power-off"></i>
-                    <span>Logout</span>
-                </button>
-            </div>
-        </nav>
-    </aside>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
 
-    <main class="flex-1 p-8">
-        <header class="flex justify-between items-center mb-8">
-            <div>
-                <h1 class="text-2xl font-bold text-slate-800">Admin Control Center</h1>
-                <p class="text-slate-500">Managing Department: Sales & Operations</p>
-            </div>
-            
-            <div class="flex items-center space-x-4">
-                <button class="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition">
-                    + Create New Entry
-                </button>
-                <div class="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold ring-2 ring-indigo-200">AD</div>
-            </div>
-        </header>
+        const AdminDashboard = () => {
+            // --- STATE MANAGEMENT ---
+            const [assets, setAssets] = useState([
+                { id: "BRC-9021", node: "Vadodara Central", data: "OFC-Primary", status: "ACTIVE" },
+                { id: "ADI-8842", node: "Ahmedabad Node", data: "Signal-Relay", status: "REVIEW" },
+                { id: "ST-7731", node: "Surat Junction", data: "Power-Grid", status: "ACTIVE" }
+            ]);
+            const [isModalOpen, setIsModalOpen] = useState(false);
+            const [newNode, setNewNode] = useState({ node: '', data: '', status: 'ACTIVE' });
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-slate-400 text-xs font-bold uppercase">Pending Approvals</p>
-                <h3 class="text-2xl font-bold text-amber-600">08</h3>
-            </div>
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-slate-400 text-xs font-bold uppercase">Total user</p>
-                <h3 class="text-2xl font-bold text-slate-800">52</h3>
-            </div>
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-slate-400 text-xs font-bold uppercase">Active user</p>
-                <h3 class="text-2xl font-bold text-green-600">8</h3>
-            </div>
-            <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
-                <p class="text-slate-400 text-xs font-bold uppercase">Links</p>
-                <h3 class="text-2xl font-bold text-indigo-600">24</h3>
-            </div>
-        </div>
+            // --- COUNTERS (Calculated from state) ---
+            const stats = {
+                pending: assets.filter(a => a.status === 'REVIEW').length,
+                total: 52 + assets.length, // Base 52 + dynamic additions
+                active: assets.filter(a => a.status === 'ACTIVE').length,
+                links: 24 + (assets.length * 2)
+            };
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-            <div class="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
-                <h2 class="font-bold text-slate-800">Assets Position</h2>
-                <button class="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center transition shadow-md shadow-emerald-200">
-                    <i class="fa-solid fa-file-arrow-down mr-2"></i> Download CSV Report
-                </button>
+            // --- FUNCTIONS ---
+            const addEntry = (e) => {
+                e.preventDefault();
+                const id = `${newNode.node.substring(0,3).toUpperCase()}-${Math.floor(1000 + Math.random() * 9000)}`;
+                setAssets([...assets, { ...newNode, id }]);
+                setIsModalOpen(false);
+                setNewNode({ node: '', data: '', status: 'ACTIVE' });
+            };
+
+            const deleteEntry = (id) => {
+                if(confirm("Are you sure you want to delete this asset?")) {
+                    setAssets(assets.filter(a => a.id !== id));
+                }
+            };
+
+            const downloadCSV = () => {
+                const headers = ["ID,Node Name,Data Type,Status\n"];
+                const rows = assets.map(a => `${a.id},${a.node},${a.data},${a.status}\n`);
+                const blob = new Blob([headers, ...rows], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.setAttribute('hidden', '');
+                a.setAttribute('href', url);
+                a.setAttribute('download', 'asset_report.csv');
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+
+            return (
+                <div className="flex min-h-screen">
+                    {/* --- SIDEBAR --- */}
+                    <aside className="w-64 bg-indigo-900 text-white p-6 hidden md:block flex-shrink-0">
+                        <div className="mb-10">
+                            <h2 className="text-2xl font-bold text-indigo-300">AdminPanel</h2>
+                            <p className="text-xs text-indigo-400 uppercase tracking-widest">Administrative Access</p>
+                        </div>
+                        <nav className="space-y-2">
+                            <a href="#" className="flex items-center space-x-3 p-3 bg-indigo-700 rounded-lg shadow-inner">
+                                <i className="fa-solid fa-gauge"></i><span>Management Hub</span>
+                            </a>
+                            <a href="datamanagement.html" className="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
+                                <i className="fa-solid fa-file-invoice"></i><span>Data Management</span>
+                            </a>
+                            <a href="sa.html" className="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
+                                <i className="fa-solid fa-users"></i><span>Manage Users</span>
+                            </a>
+                            <div className="pt-10 border-t border-indigo-800 mt-10">
+                                <button onClick={() => window.location.href='index.html'} className="flex items-center space-x-3 p-3 text-red-300 hover:bg-red-900/20 w-full rounded-lg transition">
+                                    <i className="fa-solid fa-power-off"></i><span>Logout</span>
+                                </button>
+                            </div>
+                        </nav>
+                    </aside>
+
+                    {/* --- MAIN CONTENT --- */}
+                    <main className="flex-1 p-8">
+                        <header className="flex justify-between items-center mb-8">
+                            <div>
+                                <h1 className="text-2xl font-bold text-slate-800">Admin Control Center</h1>
+                                <p className="text-slate-500">Managing Department: Western Railway Ops</p>
+                            </div>
+                            <div className="flex items-center space-x-4">
+                                <button 
+                                    onClick={() => setIsModalOpen(true)}
+                                    className="bg-indigo-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-indigo-700 transition shadow-lg shadow-indigo-200">
+                                    + Create New Entry
+                                </button>
+                                <div className="w-10 h-10 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold ring-2 ring-indigo-200">AD</div>
+                            </div>
+                        </header>
+
+                        {/* --- STAT CARDS --- */}
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+                            <StatCard title="Pending Approvals" value={stats.pending} color="text-amber-600" />
+                            <StatCard title="Total Assets" value={stats.total} color="text-slate-800" />
+                            <StatCard title="Active Nodes" value={stats.active} color="text-green-600" />
+                            <StatCard title="System Links" value={stats.links} color="text-indigo-600" />
+                        </div>
+
+                        {/* --- DATA TABLE --- */}
+                        <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                            <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
+                                <h2 className="font-bold text-slate-800">Assets Position (Live)</h2>
+                                <button 
+                                    onClick={downloadCSV}
+                                    className="bg-emerald-600 hover:bg-emerald-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center transition shadow-md shadow-emerald-200">
+                                    <i className="fa-solid fa-file-arrow-down mr-2"></i> Download CSV Report
+                                </button>
+                            </div>
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-left">
+                                    <thead className="bg-slate-50 text-slate-600 text-xs uppercase font-bold">
+                                        <tr>
+                                            <th className="p-4">Asset ID</th>
+                                            <th className="p-4">Node Location</th>
+                                            <th className="p-4">Data Stream</th>
+                                            <th className="p-4">Status</th>
+                                            <th className="p-4 text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100 text-slate-700">
+                                        {assets.map((asset) => (
+                                            <tr key={asset.id} className="hover:bg-slate-50 transition">
+                                                <td className="p-4 font-mono text-xs text-indigo-600 font-bold">#{asset.id}</td>
+                                                <td className="p-4 font-semibold">{asset.node}</td>
+                                                <td className="p-4 text-slate-500">{asset.data}</td>
+                                                <td className="p-4">
+                                                    <span className={`px-2 py-1 rounded text-[10px] font-black uppercase ${asset.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                                                        {asset.status}
+                                                    </span>
+                                                </td>
+                                                <td className="p-4 text-center space-x-3">
+                                                    <button className="text-indigo-600 hover:underline text-xs font-bold uppercase">Edit</button>
+                                                    <button onClick={() => deleteEntry(asset.id)} className="text-red-500 hover:underline text-xs font-bold uppercase">Delete</button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        {/* --- ADD MODAL --- */}
+                        {isModalOpen && (
+                            <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+                                <div className="bg-white p-8 rounded-2xl w-full max-w-md shadow-2xl border border-slate-200">
+                                    <h2 className="text-xl font-bold mb-6">Provision New Node</h2>
+                                    <form onSubmit={addEntry} className="space-y-4">
+                                        <input required placeholder="Node Location (e.g. Surat Station)" className="w-full p-3 bg-slate-50 border rounded-xl" onChange={e => setNewNode({...newNode, node: e.target.value})} />
+                                        <input required placeholder="Data Type (e.g. Fiber Link)" className="w-full p-3 bg-slate-50 border rounded-xl" onChange={e => setNewNode({...newNode, data: e.target.value})} />
+                                        <select className="w-full p-3 bg-slate-50 border rounded-xl" onChange={e => setNewNode({...newNode, status: e.target.value})}>
+                                            <option value="ACTIVE">ACTIVE</option>
+                                            <option value="REVIEW">REVIEW</option>
+                                        </select>
+                                        <div className="flex gap-3 pt-4">
+                                            <button type="button" onClick={() => setIsModalOpen(false)} className="flex-1 py-3 text-slate-500 font-bold">Cancel</button>
+                                            <button type="submit" className="flex-1 py-3 bg-indigo-600 text-white rounded-xl font-bold shadow-lg shadow-indigo-200">Create Entry</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        )}
+                    </main>
+                </div>
+            );
+        };
+
+        const StatCard = ({ title, value, color }) => (
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition">
+                <p className="text-slate-400 text-[10px] font-black uppercase tracking-widest">{title}</p>
+                <h3 className={`text-3xl font-bold mt-1 ${color}`}>{value}</h3>
             </div>
-            
-            <div class="overflow-x-auto">
-                <table class="w-full text-left">
-                    <thead class="bg-slate-50 text-slate-600 text-xs uppercase">
-                        <tr>
-                            <th class="p-4">ID</th>
-                            <th class="p-4">nodes</th>
-                            <th class="p-4">data</th>
-                            <th class="p-4">data</th>
-                            <th class="p-4 text-center">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody class="divide-y divide-slate-100 text-slate-700">
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 font-mono text-xs">#PRJ-9021</td>
-                            <td class="p-4 font-medium">data</td>
-                            <td class="p-4">data</td>
-                            <td class="p-4"><span class="bg-green-100 text-green-700 px-2 py-1 rounded text-xs font-bold">ACTIVE</span></td>
-                            <td class="p-4 text-center space-x-2">
-                                <button class="text-indigo-600 hover:text-indigo-900 text-sm font-semibold">Edit</button>
-                                <button class="text-red-500 hover:text-red-700 text-sm font-semibold">Delete</button>
-                            </td>
-                        </tr>
-                        <tr class="hover:bg-slate-50 transition">
-                            <td class="p-4 font-mono text-xs">#PRJ-8842</td>
-                            <td class="p-4 font-medium">data</td>
-                            <td class="p-4">data</td>
-                            <td class="p-4"><span class="bg-amber-100 text-amber-700 px-2 py-1 rounded text-xs font-bold">REVIEW</span></td>
-                            <td class="p-4 text-center space-x-2">
-                                <button class="text-indigo-600 hover:text-indigo-900 text-sm font-semibold">Edit</button>
-                                <button class="text-red-500 hover:text-red-700 text-sm font-semibold">Delete</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
+        );
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<AdminDashboard />);
+    </script>
 </body>
 </html>
