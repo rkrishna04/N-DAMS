@@ -9,6 +9,7 @@
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.materialdesignicons.com/2.0.46/css/materialdesignicons.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
     
     <script id="tailwind-config">
@@ -42,66 +43,76 @@
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState } = React;
 
-        const BackupApp = () => {
-            const [logs, setLogs] = useState([
-                { id: 1, timestamp: '2026-03-07 04:00:01', checksum: 'sha256:7f8d...a21b', status: 'Success', size: '42.8 GB' },
-                { id: 2, timestamp: '2026-03-06 04:00:01', checksum: 'sha256:3a1c...eef9', status: 'Success', size: '42.7 GB' }
+        const BackupManager = () => {
+            const [isProcessing, setIsProcessing] = useState(false);
+            const [lastSize, setLastSize] = useState("0 Bytes");
+            const [backupHistory, setBackupHistory] = useState([
+                { id: 1, name: "SYSTEM_RECOVERY_INIT.json", size: "4.2 KB", date: "2026-03-05 10:30", status: "Stored" }
             ]);
-            const [isBackingUp, setIsBackingUp] = useState(false);
 
-            // --- CORE FUNCTION: DOWNLOAD ALL DATA LOCALLY ---
-            const triggerLocalDownload = () => {
-                setIsBackingUp(true);
+            // Utility to format bytes into readable sizes
+            const formatBytes = (bytes, decimals = 2) => {
+                if (bytes === 0) return '0 Bytes';
+                const k = 1024;
+                const dm = decimals < 0 ? 0 : decimals;
+                const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+            };
 
-                // 1. Simulate Data Gathering from your MERN/FastAPI backend
-                const systemData = {
-                    metadata: {
-                        version: "4.2.0-stable",
-                        exported_at: new Date().toISOString(),
-                        origin: "System Root NOCC"
-                    },
-                    content: {
-                        users: [
-                            { id: "root_01", role: "Root", last_login: "2026-03-07" },
-                            { id: "sa_05", role: "Super Admin", status: "Active" }
-                        ],
-                        system_stats: { health: "99%", uptime: "342 days" },
-                        logs: logs
-                    }
+            const runBackupWorkflow = () => {
+                setIsProcessing(true);
+
+                // 1. Simulate complex data gathering from your NOCC ROOT environment
+                const simulatedDatabase = {
+                    system_info: { version: "4.2.0", node: "WR-VADODARA-01" },
+                    timestamp: new Date().toISOString(),
+                    assets: [
+                        { id: "STN_001", name: "Vadodara Jn", status: "Operational" },
+                        { id: "STN_002", name: "Ahmedabad", status: "Maintenance" }
+                    ],
+                    security_logs: [
+                        { event: "Root Login", user: "Krishnakumar_Root", ip: "192.168.1.1" }
+                    ]
                 };
 
-                // 2. Create the physical file (Blob)
+                // 2. Processing delay to simulate serialization
                 setTimeout(() => {
-                    const dataStr = JSON.stringify(systemData, null, 4);
-                    const dataBlob = new Blob([dataStr], { type: 'application/json' });
-                    const url = window.URL.createObjectURL(dataBlob);
+                    const dataString = JSON.stringify(simulatedDatabase, null, 4);
                     
-                    // 3. Trigger Browser Download
+                    // 3. CREATE BLOB AND CALCULATE TRUE SIZE
+                    const blob = new Blob([dataString], { type: 'application/json' });
+                    const trueSize = formatBytes(blob.size);
+                    setLastSize(trueSize);
+
+                    // 4. TRIGGER BROWSER DOWNLOAD
+                    const url = URL.createObjectURL(blob);
                     const link = document.createElement('a');
                     link.href = url;
-                    link.download = `ROOT_BACKUP_${new Date().getTime()}.json`;
+                    link.download = `NOCC_ROOT_BACKUP_${Date.now()}.json`;
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
+                    URL.revokeObjectURL(url);
 
-                    // 4. Update UI Logs
-                    const newEntry = {
+                    // 5. Update UI History
+                    const newLog = {
                         id: Date.now(),
-                        timestamp: new Date().toLocaleString(),
-                        checksum: 'sha256:' + Math.random().toString(16).slice(2, 10) + '...',
-                        status: 'Success',
-                        size: (Math.random() * (45 - 40) + 40).toFixed(1) + ' GB'
+                        name: link.download,
+                        size: trueSize,
+                        date: new Date().toLocaleString(),
+                        status: "Success"
                     };
-                    setLogs([newEntry, ...logs]);
-                    setIsBackingUp(false);
-                }, 2000); // 2-second simulation delay
+                    setBackupHistory([newLog, ...backupHistory]);
+                    setIsProcessing(false);
+                }, 1800);
             };
 
             return (
                 <div className="flex h-screen overflow-hidden">
-                    {/* --- SIDEBAR --- */}
+                    {/* --- SIDE NAVIGATION --- */}
                     <aside className="w-64 flex-shrink-0 border-r border-[#d3e1e3] dark:border-[#2b313a] flex flex-col bg-background-light dark:bg-background-dark">
                         <div className="p-6">
                             <div className="flex items-center gap-3 mb-8">
@@ -118,7 +129,7 @@
                                     <span className="material-symbols-outlined text-sm">dashboard</span>
                                     <span className="text-sm">Overview</span>
                                 </a>
-                                <a href="backup.html" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-[#e9f0f1] font-semibold border-l-4 border-primary">
+                                <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-[#e9f0f1] font-semibold border-l-4 border-primary">
                                     <span className="material-symbols-outlined text-sm">database</span>
                                     <span className="text-sm">System Backup</span>
                                 </a>
@@ -128,110 +139,86 @@
                                 </a>
                             </nav>
                         </div>
-                        <div className="mt-auto p-4 border-t border-[#d3e1e3] dark:border-[#2b313a]">
-                            <button className="w-full flex items-center justify-center gap-2 py-3 bg-accent-red text-white font-bold rounded-lg uppercase tracking-widest text-xs">
-                                <span className="material-symbols-outlined text-sm">lock_reset</span>
-                                Emergency Lock
-                            </button>
-                        </div>
                     </aside>
 
                     {/* --- MAIN CONTENT --- */}
-                    <main className="flex-1 flex flex-col overflow-hidden bg-[#f9fbfb] dark:bg-background-dark">
-                        <header className="h-16 border-b border-[#d3e1e3] dark:border-[#2b313a] flex items-center justify-between px-8 bg-background-light dark:bg-background-dark z-10">
+                    <main className="flex-1 flex flex-col bg-[#f9fbfb] dark:bg-background-dark overflow-hidden">
+                        <header className="h-16 border-b border-[#d3e1e3] dark:border-[#2b313a] flex items-center justify-between px-8 bg-background-light dark:bg-background-dark">
                             <div className="flex items-center gap-4">
                                 <span className="text-sm font-medium text-[#5a868c]">Path:</span>
                                 <div className="text-xs font-mono bg-[#e9f0f1] dark:bg-[#2b313a] px-3 py-1 rounded border border-[#d3e1e3] dark:border-[#3a414b]">
-                                    root <span class="mx-2 opacity-50">/</span> system <span class="mx-2 opacity-50">/</span> backup
+                                    root <span className="mx-2 opacity-50">/</span> system <span className="mx-2 opacity-50">/</span> backup-engine
                                 </div>
                             </div>
                         </header>
 
-                        <div className="flex-1 overflow-y-auto p-8 space-y-8">
-                            {/* Backup Control Card */}
-                            <div className="grid grid-cols-12 gap-8">
-                                <div className="col-span-12">
-                                    <section className="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] overflow-hidden">
-                                        <div className="px-6 py-6 border-b border-[#d3e1e3] dark:border-[#3a414b] flex justify-between items-center bg-[#fcfdfc] dark:bg-[#2b313a]/50">
-                                            <div>
-                                                <h2 className="text-xl font-bold flex items-center gap-3">
-                                                    <span className="material-symbols-outlined text-primary scale-125">cloud_download</span>
-                                                    Data Extraction Engine
-                                                </h2>
-                                                <p className="text-xs text-[#5a868c] mt-1">Generate a full encrypted snapshot of the system database for local storage.</p>
-                                            </div>
-                                            <button 
-                                                onClick={triggerLocalDownload}
-                                                disabled={isBackingUp}
-                                                className="px-6 py-3 bg-primary text-white text-sm font-bold rounded-lg hover:bg-primary/90 transition-all uppercase tracking-widest shadow-lg shadow-primary/20 disabled:opacity-50"
-                                            >
-                                                {isBackingUp ? 'Processing Blob...' : 'Run Manual Backup'}
-                                            </button>
-                                        </div>
-                                        <div className="p-8 grid grid-cols-3 gap-6">
-                                            <div className="p-4 rounded-lg bg-[#e9f0f1] dark:bg-background-dark border border-[#d3e1e3] dark:border-[#3a414b]">
-                                                <p className="text-[10px] uppercase font-bold text-[#5a868c] mb-2">Export Format</p>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="material-symbols-outlined text-primary">data_object</span>
-                                                    <span className="text-sm font-mono font-bold">JSON (Encrypted)</span>
-                                                </div>
-                                            </div>
-                                            <div className="p-4 rounded-lg bg-[#e9f0f1] dark:bg-background-dark border border-[#d3e1e3] dark:border-[#3a414b]">
-                                                <p className="text-[10px] uppercase font-bold text-[#5a868c] mb-2">Compression</p>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="material-symbols-outlined text-accent-green">inventory_2</span>
-                                                    <span className="text-sm font-bold">Gzip Level 9</span>
-                                                </div>
-                                            </div>
-                                            <div className="p-4 rounded-lg bg-[#e9f0f1] dark:bg-background-dark border border-[#d3e1e3] dark:border-[#3a414b]">
-                                                <p className="text-[10px] uppercase font-bold text-[#5a868c] mb-2">Local Write Status</p>
-                                                <div className="flex items-center gap-2">
-                                                    <span className="material-symbols-outlined text-accent-gold">check_circle</span>
-                                                    <span className="text-sm font-bold">Ready for Download</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </section>
+                        <div className="flex-1 overflow-y-auto p-8 space-y-6">
+                            {/* Action Card */}
+                            <section className="bg-background-light dark:bg-surface-dark rounded-2xl border border-[#d3e1e3] dark:border-[#3a414b] p-8 shadow-sm">
+                                <div className="flex justify-between items-start mb-8">
+                                    <div>
+                                        <h2 className="text-2xl font-bold tracking-tight">Data Extraction Engine</h2>
+                                        <p className="text-[#5a868c] mt-1">Generate a physical JSON snapshot of the current system state for offline storage.</p>
+                                    </div>
+                                    <div className="text-right">
+                                        <p className="text-[10px] uppercase font-bold text-[#5a868c] mb-1">Last Export Size</p>
+                                        <p className="text-xl font-mono font-bold text-primary">{lastSize}</p>
+                                    </div>
                                 </div>
 
-                                {/* Logs Table */}
-                                <div className="col-span-12">
-                                    <section className="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] overflow-hidden">
-                                        <div className="px-6 py-4 border-b border-[#d3e1e3] dark:border-[#3a414b]">
-                                            <h2 className="text-sm font-bold uppercase tracking-widest text-[#5a868c]">Backup Audit Trail</h2>
+                                <div className="bg-[#e9f0f1] dark:bg-background-dark/50 rounded-xl p-6 border border-dashed border-[#d3e1e3] dark:border-[#3a414b] mb-6">
+                                    <div className="flex items-center gap-4">
+                                        <div className={`size-12 rounded-full flex items-center justify-center ${isProcessing ? 'animate-spin bg-accent-gold/20 text-accent-gold' : 'bg-primary/10 text-primary'}`}>
+                                            <span className="material-symbols-outlined">{isProcessing ? 'sync' : 'database_upload'}</span>
                                         </div>
-                                        <table className="w-full text-left">
-                                            <thead className="bg-[#e9f0f1]/30 dark:bg-[#1a1e23]/30 text-[#5a868c] text-[10px] uppercase font-bold">
-                                                <tr>
-                                                    <th className="px-6 py-4">Timestamp</th>
-                                                    <th className="px-6 py-4">Checksum</th>
-                                                    <th className="px-6 py-4">Status</th>
-                                                    <th className="px-6 py-4">Size</th>
-                                                    <th className="px-6 py-4 text-right">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody className="divide-y divide-[#d3e1e3] dark:divide-[#3a414b] text-sm">
-                                                {logs.map(log => (
-                                                    <tr key={log.id} className="hover:bg-primary/5 transition-colors">
-                                                        <td className="px-6 py-4 font-mono text-xs">{log.timestamp}</td>
-                                                        <td className="px-6 py-4 font-mono text-[10px] opacity-60">{log.checksum}</td>
-                                                        <td className="px-6 py-4">
-                                                            <span className="flex items-center gap-2 text-accent-green font-bold">
-                                                                <span className="size-1.5 rounded-full bg-accent-green"></span>
-                                                                {log.status}
-                                                            </span>
-                                                        </td>
-                                                        <td className="px-6 py-4 font-bold">{log.size}</td>
-                                                        <td className="px-6 py-4 text-right">
-                                                            <button className="text-primary font-bold hover:underline">Re-Download</button>
-                                                        </td>
-                                                    </tr>
-                                                ))}
-                                            </tbody>
-                                        </table>
-                                    </section>
+                                        <div>
+                                            <h3 className="font-bold">Ready for Local Write</h3>
+                                            <p className="text-xs text-[#5a868c]">The system will compile all station assets, users, and logs into a single file.</p>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
+
+                                <button 
+                                    onClick={runBackupWorkflow}
+                                    disabled={isProcessing}
+                                    className="w-full py-4 bg-primary text-white rounded-xl font-bold uppercase tracking-widest text-sm shadow-xl shadow-primary/20 hover:scale-[1.005] active:scale-[0.99] transition-all disabled:opacity-50 flex items-center justify-center gap-3"
+                                >
+                                    <span className="material-symbols-outlined text-xl">download</span>
+                                    {isProcessing ? 'Analyzing Database Footprint...' : 'Run & Download Manual Backup'}
+                                </button>
+                            </section>
+
+                            {/* History Table */}
+                            <section className="bg-background-light dark:bg-surface-dark rounded-2xl border border-[#d3e1e3] dark:border-[#3a414b] overflow-hidden shadow-sm">
+                                <div className="px-6 py-4 border-b border-[#d3e1e3] dark:border-[#3a414b] bg-[#fcfdfc] dark:bg-[#2b313a]/50">
+                                    <h2 className="text-xs font-bold uppercase tracking-widest text-[#5a868c]">Extraction Audit Trail</h2>
+                                </div>
+                                <table className="w-full text-left">
+                                    <thead className="bg-[#e9f0f1]/30 dark:bg-[#1a1e23]/30 text-[#5a868c] text-[10px] uppercase font-bold">
+                                        <tr>
+                                            <th className="px-6 py-4">Filename</th>
+                                            <th className="px-6 py-4">True Size</th>
+                                            <th className="px-6 py-4">Date & Time</th>
+                                            <th className="px-6 py-4 text-right">Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-[#d3e1e3] dark:divide-[#3a414b]">
+                                        {backupHistory.map(log => (
+                                            <tr key={log.id} className="hover:bg-primary/5 transition-colors group">
+                                                <td className="px-6 py-4 font-mono text-xs font-bold">{log.name}</td>
+                                                <td className="px-6 py-4 font-bold text-primary">{log.size}</td>
+                                                <td className="px-6 py-4 text-xs text-[#5a868c]">{log.date}</td>
+                                                <td className="px-6 py-4 text-right">
+                                                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-accent-green/10 text-accent-green text-[10px] font-bold uppercase">
+                                                        <span className="size-1.5 rounded-full bg-accent-green animate-pulse"></span>
+                                                        {log.status}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </section>
                         </div>
                     </main>
                 </div>
@@ -239,7 +226,7 @@
         };
 
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<BackupApp />);
+        root.render(<BackupManager />);
     </script>
 </body>
 </html>
