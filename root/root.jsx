@@ -1,188 +1,378 @@
-import React, { useState, useEffect } from 'react';
+<!DOCTYPE html>
 
-const RootDashboard = () => {
-  // --- STATE MANAGEMENT (Frontend Logic Layer) ---
-  const [backups, setBackups] = useState([
-    { id: 'sha256:7f8d...a21b', timestamp: '2023-11-20 04:00:01', status: 'Success', size: '42.8 GB' },
-    { id: 'sha256:3a1c...eef9', timestamp: '2023-11-19 04:00:01', status: 'Success', size: '42.7 GB' },
-  ]);
-
-  const [saAccounts, setSaAccounts] = useState([
-    { id: 1, name: 'j.dawson_admin', initial: 'JD', status: 'Active 5m ago', active: true },
-    { id: 2, name: 'm.knight_root', initial: 'MK', status: 'Active 2h ago', active: true },
-    { id: 3, name: 's.lee_admin', initial: 'SL', status: 'Access Revoked', active: false },
-  ]);
-
-  const [alerts, setAlerts] = useState([
-    { id: 1, type: 'Critical', title: 'Unusual SSH login attempt', meta: 'Source IP: 192.168.1.104', time: '2m ago', color: 'red' },
-    { id: 2, type: 'Warning', title: 'DB Connection Timeout', meta: 'Instance: prod-db-01', time: '15m ago', color: 'gold' },
-  ]);
-
-  const [backupFreq, setBackupFreq] = useState('Daily');
-
-  // --- WORKFLOW 7: BACKUP MANAGEMENT ---
-  const runManualBackup = () => {
-    const newBackup = {
-      id: `sha256:${Math.random().toString(16).slice(2, 6)}...${Math.random().toString(16).slice(2, 6)}`,
-      timestamp: new Date().toLocaleString(),
-      status: 'Success',
-      size: '43.1 GB'
-    };
-    // Reflect change immediately in the table [cite: 104, 125]
-    setBackups([newBackup, ...backups]);
-    alert("Manual Backup initiated and verified successfully[cite: 94].");
-  };
-
-  // --- WORKFLOW 6: REVOKE PERMISSION ---
-  const toggleAccountStatus = (id) => {
-    setSaAccounts(prev => prev.map(acc => {
-      if (acc.id === id) {
-        const newStatus = !acc.active;
-        // Log action in console to simulate Audit Log creation [cite: 113, 135]
-        console.log(`Audit: ${acc.name} status changed to ${newStatus ? 'Active' : 'Revoked'}`);
-        return { ...acc, active: newStatus, status: newStatus ? 'Active now' : 'Access Revoked' };
-      }
-      return acc;
-    }));
-  };
-
-  return (
-    <div className="flex h-screen overflow-hidden bg-[#1a1e23] text-[#e9f0f1] font-sans">
-      {/* SIDE NAVIGATION [cite: 18, 20] */}
-      <aside className="w-64 border-r border-[#2b313a] flex flex-col bg-[#1a1e23]">
-        <div className="p-6">
-          <div className="flex items-center gap-3 mb-8">
-            <div className="h-8 w-8 bg-[#1a535b] rounded-lg flex items-center justify-center text-white font-bold">R</div>
-            <div>
-              <h1 className="text-lg font-bold leading-tight">System Root</h1>
-              <p className="text-xs text-[#5a868c]">v4.2.0-stable</p>
-            </div>
-          </div>
-          <nav className="space-y-1">
-            {['Overview', 'System Backup', 'Identity Management', 'Security Alerts'].map((item, idx) => (
-              <a key={item} href="#" className={`flex items-center gap-3 px-3 py-2.5 rounded-lg transition-colors ${idx === 0 ? 'bg-[#1a535b]/10 text-[#e9f0f1] border-l-4 border-[#1a535b]' : 'text-[#5a868c] hover:bg-[#2b313a]'}`}>
-                <span className="text-sm">{item}</span>
-              </a>
-            ))}
-          </nav>
-        </div>
-        <div className="mt-auto p-4 border-t border-[#2b313a]">
-          <button className="w-full py-3 bg-[#D85B42] text-white text-xs font-bold rounded-lg uppercase tracking-widest hover:bg-[#D85B42]/90">
-            Emergency Lock
-          </button>
-        </div>
-      </aside>
-
-      {/* MAIN CONTENT [cite: 18, 130] */}
-      <main className="flex-1 flex flex-col overflow-hidden">
-        <header className="h-16 border-b border-[#2b313a] flex items-center justify-between px-8 bg-[#1a1e23]">
-          <div className="flex items-center gap-4 text-xs font-mono">
-             <span className="text-[#5a868c]">Path:</span> root / security / dashboard
-          </div>
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2 text-[#078834]">
-              <div className="h-2 w-2 rounded-full bg-[#078834] animate-pulse"></div>
-              <span className="text-[10px] font-bold uppercase">System Pulse: Nominal [cite: 90]</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <div className="text-right">
-                <p className="text-sm font-bold">Root_User</p>
-                <p className="text-[10px] text-[#1a535b] uppercase font-bold">Superuser [cite: 1, 11]</p>
-              </div>
-              <div className="h-10 w-10 rounded-full border-2 border-[#1a535b] bg-gray-700"></div>
-            </div>
-          </div>
-        </header>
-
-        <div className="flex-1 overflow-y-auto p-8 space-y-8">
-          {/* STATS ROW [cite: 19] */}
-          <div className="grid grid-cols-4 gap-6">
-            <div className="bg-[#24292f] p-6 rounded-xl border border-[#3a414b]">
-              <p className="text-xs text-[#5a868c] uppercase font-bold">Total Backups</p>
-              <p className="text-3xl font-black mt-1">{backups.length + 246}</p>
-            </div>
-            <div className="bg-[#24292f] p-6 rounded-xl border border-[#3a414b]">
-              <p className="text-xs text-[#5a868c] uppercase font-bold">System Health</p>
-              <p className="text-3xl font-black mt-1">99%</p>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-12 gap-8">
-            {/* BACKUP SCHEDULER [cite: 81, 92] */}
-            <section className="col-span-8 bg-[#24292f] rounded-xl border border-[#3a414b]">
-              <div className="px-6 py-4 border-b border-[#3a414b] flex justify-between items-center">
-                <h2 className="text-lg font-bold">Backup Scheduler</h2>
-                <button onClick={runManualBackup} className="px-4 py-2 bg-[#1a535b] text-white text-xs font-bold rounded-lg uppercase">
-                  Run Manual Backup [cite: 83]
-                </button>
-              </div>
-              <div className="p-6">
-                <div className="flex h-12 bg-[#1a1e23] p-1 rounded-xl mb-6">
-                  {['Daily', 'Weekly', 'Monthly'].map(freq => (
-                    <button key={freq} onClick={() => setBackupFreq(freq)} className={`flex-1 rounded-lg text-xs font-bold uppercase ${backupFreq === freq ? 'bg-[#3a414b] text-white' : 'text-[#5a868c]'}`}>
-                      {freq}
-                    </button>
-                  ))}
-                </div>
-                <table className="w-full text-left text-sm">
-                  <thead className="text-[10px] uppercase text-[#5a868c] bg-[#1a1e23]/30">
-                    <tr><th className="px-6 py-3">Timestamp</th><th className="px-6 py-3">Status</th><th className="px-6 py-3 text-right">Action</th></tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#3a414b]">
-                    {backups.map((b, i) => (
-                      <tr key={i} className="hover:bg-[#3a414b]/20">
-                        <td className="px-6 py-4 font-mono text-xs">{b.timestamp}</td>
-                        <td className="px-6 py-4 text-[#078834] font-semibold">{b.status}</td>
-                        <td className="px-6 py-4 text-right"><button className="text-[#1a535b] font-bold hover:underline">Restore</button></td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            {/* SECURITY FEED & SA MANAGEMENT [cite: 12, 110] */}
-            <div className="col-span-4 space-y-8">
-              <section className="bg-[#24292f] rounded-xl border border-[#3a414b] h-[300px] flex flex-col">
-                <div className="px-6 py-4 border-b border-[#3a414b] font-bold text-sm">Security Feed [cite: 6]</div>
-                <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                  {alerts.map(a => (
-                    <div key={a.id} className={`p-3 border rounded-lg bg-${a.color}-500/10 border-${a.color}-500/20`}>
-                      <div className="flex justify-between text-[10px] uppercase font-bold mb-1">
-                        <span style={{ color: a.color === 'gold' ? '#C8AA6E' : '#D85B42' }}>{a.type}</span>
-                        <span className="text-[#5a868c]">{a.time}</span>
-                      </div>
-                      <p className="text-xs font-bold">{a.title}</p>
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Root Security &amp; Backup Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1a535b",
+                        "background-light": "#fcfdfc",
+                        "background-dark": "#1a1e23",
+                        "surface-dark": "#24292f",
+                        "accent-gold": "#C8AA6E",
+                        "accent-red": "#D85B42",
+                        "accent-green": "#078834"
+                    },
+                    fontFamily: {
+                        "display": ["Manrope", "sans-serif"]
+                    },
+                    borderRadius: { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" },
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body {
+            font-family: 'Manrope', sans-serif;
+        }
+        /* Custom scrollbar for technical look */
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #1a1e23; }
+        ::-webkit-scrollbar-thumb { background: #1a535b; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark text-[#101819] dark:text-[#e9f0f1] font-display selection:bg-primary/30">
+<div class="flex h-screen overflow-hidden">
+<!-- Side Navigation -->
+<aside class="w-64 flex-shrink-0 border-r border-[#d3e1e3] dark:border-[#2b313a] flex flex-col bg-background-light dark:bg-background-dark">
+<div class="p-6">
+<div class="flex items-center gap-3 mb-8">
+<div class="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+<span class="material-symbols-outlined">terminal</span>
+</div>
+<div>
+<h1 class="text-lg font-bold leading-tight">System Root</h1>
+<p class="text-xs text-[#5a868c]">v4.2.0-stable</p>
+</div>
+</div>
+<nav class="space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-[#e9f0f1] font-semibold border-l-4 border-primary" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-sm">Overview</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#e9f0f1] dark:hover:bg-[#2b313a] transition-colors text-[#5a868c]" href="#">
+<span class="material-symbols-outlined">database</span>
+<span class="text-sm">System Backup</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#e9f0f1] dark:hover:bg-[#2b313a] transition-colors text-[#5a868c]" href="#">
+<span class="material-symbols-outlined">shield_person</span>
+<span class="text-sm">Identity Management</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#e9f0f1] dark:hover:bg-[#2b313a] transition-colors text-[#5a868c]" href="#">
+<span class="material-symbols-outlined">warning</span>
+<span class="text-sm">Security Alerts</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-[#e9f0f1] dark:hover:bg-[#2b313a] transition-colors text-[#5a868c]" href="#">
+<span class="material-symbols-outlined">history</span>
+<span class="text-sm">Audit Logs</span>
+</a>
+</nav>
+</div>
+<div class="mt-auto p-4 border-t border-[#d3e1e3] dark:border-[#2b313a]">
+<button class="w-full flex items-center justify-center gap-2 py-3 bg-accent-red text-white font-bold rounded-lg hover:bg-accent-red/90 transition-all shadow-lg shadow-accent-red/20">
+<span class="material-symbols-outlined text-sm">lock_reset</span>
+<span class="text-xs uppercase tracking-widest">Emergency Lock</span>
+</button>
+</div>
+</aside>
+<!-- Main Content -->
+<main class="flex-1 flex flex-col overflow-hidden bg-[#f9fbfb] dark:bg-background-dark">
+<!-- Header -->
+<header class="h-16 border-b border-[#d3e1e3] dark:border-[#2b313a] flex items-center justify-between px-8 bg-background-light dark:bg-background-dark z-10">
+<div class="flex items-center gap-4">
+<span class="text-sm font-medium text-[#5a868c]">Path:</span>
+<div class="flex items-center text-xs font-mono bg-[#e9f0f1] dark:bg-[#2b313a] px-3 py-1 rounded border border-[#d3e1e3] dark:border-[#3a414b]">
+                        root <span class="mx-2 opacity-50">/</span> security <span class="mx-2 opacity-50">/</span> dashboard
                     </div>
-                  ))}
-                </div>
-              </section>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2 text-accent-green">
+<div class="size-2 rounded-full bg-accent-green animate-pulse"></div>
+<span class="text-xs font-bold uppercase tracking-tighter">System Pulse: Nominal</span>
+</div>
+<div class="h-8 w-px bg-[#d3e1e3] dark:border-[#2b313a]"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-sm font-bold leading-none">Root_User</p>
+<p class="text-[10px] text-primary uppercase font-bold tracking-widest">Superuser</p>
+</div>
+<div class="size-10 rounded-full border-2 border-primary bg-cover bg-center" data-alt="User profile avatar circle" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCeh65TEuupNVF2uIeELCVq2MMDbs2SmnRdDT78U9xGiRwcPs1vc7mTW_vv2x0VN9JTSP-e3F31Lpu4bfayTQ-3I87ZB0yfjhwCDdybA8aBJQnbCRr77ZvSyoQIcoanP6GDktgFi3PFT9T3f1AzVdZV33cniE0xcj_E2HzBcXo8-ZwL-YpAFrwCn3BCvu9PDHUMQ_h0SkIv-lfhBMd9pAjTPfUgdnd_lpuF7uZYGK6Ml8tYZwu1Db1nA4dNkXSx_8cEu7Up_wvuE7A')"></div>
+</div>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="flex-1 overflow-y-auto p-8 custom-scrollbar">
+<!-- Stats Row -->
+<div class="grid grid-cols-4 gap-6 mb-8">
+<div class="bg-background-light dark:bg-surface-dark p-6 rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] hover:border-primary transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-primary group-hover:scale-110 transition-transform">cloud_done</span>
+<span class="text-[10px] font-bold text-accent-green bg-accent-green/10 px-2 py-0.5 rounded-full uppercase tracking-tighter">+12.4%</span>
+</div>
+<p class="text-xs text-[#5a868c] uppercase tracking-widest font-bold">Total Backups</p>
+<p class="text-3xl font-black mt-1">248</p>
+</div>
+<div class="bg-background-light dark:bg-surface-dark p-6 rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] hover:border-primary transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-accent-green group-hover:scale-110 transition-transform">monitor_heart</span>
+<span class="text-[10px] font-bold text-[#5a868c] bg-[#e9f0f1] dark:bg-[#3a414b] px-2 py-0.5 rounded-full uppercase tracking-tighter">Stable</span>
+</div>
+<p class="text-xs text-[#5a868c] uppercase tracking-widest font-bold">System Health</p>
+<p class="text-3xl font-black mt-1">99%</p>
+</div>
+<div class="bg-background-light dark:bg-surface-dark p-6 rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] hover:border-primary transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-accent-gold group-hover:scale-110 transition-transform">key_visualizer</span>
+<span class="text-[10px] font-bold text-accent-red bg-accent-red/10 px-2 py-0.5 rounded-full uppercase tracking-tighter">-1 Session</span>
+</div>
+<p class="text-xs text-[#5a868c] uppercase tracking-widest font-bold">Active SA Accounts</p>
+<p class="text-3xl font-black mt-1">05</p>
+</div>
+<div class="bg-background-light dark:bg-surface-dark p-6 rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] hover:border-primary transition-all group">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-accent-red group-hover:scale-110 transition-transform">verified_user</span>
+<span class="text-[10px] font-bold text-accent-green bg-accent-green/10 px-2 py-0.5 rounded-full uppercase tracking-tighter">Secure</span>
+</div>
+<p class="text-xs text-[#5a868c] uppercase tracking-widest font-bold">Days Since Incident</p>
+<p class="text-3xl font-black mt-1">342</p>
+</div>
+</div>
+<div class="grid grid-cols-12 gap-8">
+<!-- Left Column: Backup Controls & History -->
+<div class="col-span-8 space-y-8">
+<!-- Backup Scheduler Section -->
+<section class="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] overflow-hidden">
+<div class="px-6 py-4 border-b border-[#d3e1e3] dark:border-[#3a414b] flex justify-between items-center bg-[#fcfdfc] dark:bg-[#2b313a]/50">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">schedule</span>
+                                    Backup Scheduler
+                                </h2>
+<button class="px-4 py-2 bg-primary text-white text-xs font-bold rounded-lg hover:bg-primary/90 transition-all uppercase tracking-widest shadow-lg shadow-primary/20">
+                                    Run Manual Backup
+                                </button>
+</div>
+<div class="p-6">
+<p class="text-sm text-[#5a868c] mb-4">Select automated backup frequency across global system clusters.</p>
+<div class="flex h-12 items-center justify-center rounded-xl bg-[#e9f0f1] dark:bg-[#1a1e23] p-1.5 mb-6">
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#3a414b] has-[:checked]:shadow-sm has-[:checked]:text-primary text-[#5a868c] text-xs font-bold uppercase transition-all tracking-widest">
+<span>Daily</span>
+<input checked="" class="invisible w-0" name="backup-freq" type="radio" value="Daily"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#3a414b] has-[:checked]:shadow-sm has-[:checked]:text-primary text-[#5a868c] text-xs font-bold uppercase transition-all tracking-widest">
+<span>Weekly</span>
+<input class="invisible w-0" name="backup-freq" type="radio" value="Weekly"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#3a414b] has-[:checked]:shadow-sm has-[:checked]:text-primary text-[#5a868c] text-xs font-bold uppercase transition-all tracking-widest">
+<span>15 Days</span>
+<input class="invisible w-0" name="backup-freq" type="radio" value="15-Days"/>
+</label>
+<label class="flex cursor-pointer h-full grow items-center justify-center overflow-hidden rounded-lg px-2 has-[:checked]:bg-white dark:has-[:checked]:bg-[#3a414b] has-[:checked]:shadow-sm has-[:checked]:text-primary text-[#5a868c] text-xs font-bold uppercase transition-all tracking-widest">
+<span>Monthly</span>
+<input class="invisible w-0" name="backup-freq" type="radio" value="Monthly"/>
+</label>
+</div>
+<div class="flex gap-4">
+<div class="flex-1 bg-[#e9f0f1]/50 dark:bg-[#1a1e23]/50 p-4 rounded-lg border border-dashed border-[#d3e1e3] dark:border-[#3a414b]">
+<p class="text-[10px] text-[#5a868c] uppercase font-bold mb-1">Next Scheduled</p>
+<div class="flex items-center gap-2">
+<span class="text-xl font-mono font-bold">04:22:18</span>
+<span class="text-xs text-[#5a868c]">until execution</span>
+</div>
+</div>
+<div class="flex-1 bg-[#e9f0f1]/50 dark:bg-[#1a1e23]/50 p-4 rounded-lg border border-dashed border-[#d3e1e3] dark:border-[#3a414b]">
+<p class="text-[10px] text-[#5a868c] uppercase font-bold mb-1">Retention Policy</p>
+<div class="flex items-center gap-2">
+<span class="text-xl font-bold">90 Days</span>
+<span class="text-xs text-[#5a868c]">archive limit</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Backup Timeline Table -->
+<section class="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] overflow-hidden">
+<div class="px-6 py-4 border-b border-[#d3e1e3] dark:border-[#3a414b] flex justify-between items-center">
+<h2 class="text-lg font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">history</span>
+                                    Backup Logs
+                                </h2>
+<div class="flex gap-2">
+<button class="size-8 flex items-center justify-center border border-[#d3e1e3] dark:border-[#3a414b] rounded hover:bg-[#e9f0f1] dark:hover:bg-[#3a414b]">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+</button>
+<button class="size-8 flex items-center justify-center border border-[#d3e1e3] dark:border-[#3a414b] rounded hover:bg-[#e9f0f1] dark:hover:bg-[#3a414b]">
+<span class="material-symbols-outlined text-sm">download</span>
+</button>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead class="bg-[#e9f0f1]/30 dark:bg-[#1a1e23]/30 text-[#5a868c] text-[10px] uppercase font-bold">
+<tr>
+<th class="px-6 py-3">Timestamp</th>
+<th class="px-6 py-3">Checksum ID</th>
+<th class="px-6 py-3">Status</th>
+<th class="px-6 py-3">Size</th>
+<th class="px-6 py-3 text-right">Action</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-[#d3e1e3] dark:divide-[#3a414b] text-sm">
+<tr class="hover:bg-[#e9f0f1]/20 dark:hover:bg-[#3a414b]/20 transition-colors">
+<td class="px-6 py-4 font-mono text-xs">2023-11-20 04:00:01</td>
+<td class="px-6 py-4 font-mono text-[10px]">sha256:7f8d...a21b</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 text-accent-green font-semibold">
+<span class="size-1.5 rounded-full bg-accent-green"></span>
+                                                    Success
+                                                </span>
+</td>
+<td class="px-6 py-4">42.8 GB</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Restore</button>
+</td>
+</tr>
+<tr class="hover:bg-[#e9f0f1]/20 dark:hover:bg-[#3a414b]/20 transition-colors">
+<td class="px-6 py-4 font-mono text-xs">2023-11-19 04:00:01</td>
+<td class="px-6 py-4 font-mono text-[10px]">sha256:3a1c...eef9</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 text-accent-green font-semibold">
+<span class="size-1.5 rounded-full bg-accent-green"></span>
+                                                    Success
+                                                </span>
+</td>
+<td class="px-6 py-4">42.7 GB</td>
+<td class="px-6 py-4 text-right">
+<button class="text-primary font-bold hover:underline">Restore</button>
+</td>
+</tr>
+<tr class="hover:bg-[#e9f0f1]/20 dark:hover:bg-[#3a414b]/20 transition-colors bg-accent-red/5">
+<td class="px-6 py-4 font-mono text-xs">2023-11-18 04:00:02</td>
+<td class="px-6 py-4 font-mono text-[10px]">sha256:0000...0000</td>
+<td class="px-6 py-4">
+<span class="inline-flex items-center gap-1.5 text-accent-red font-semibold">
+<span class="size-1.5 rounded-full bg-accent-red animate-ping"></span>
+                                                    Failed
+                                                </span>
+</td>
+<td class="px-6 py-4">--</td>
+<td class="px-6 py-4 text-right">
+<button class="text-accent-red font-bold hover:underline">Retry</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="px-6 py-3 border-t border-[#d3e1e3] dark:border-[#3a414b] bg-[#e9f0f1]/10 flex justify-center">
+<button class="text-xs font-bold text-[#5a868c] hover:text-primary transition-colors">View All Logs (254 entries)</button>
+</div>
+</section>
+</div>
+<!-- Right Column: Alerts & Admin Management -->
+<div class="col-span-4 space-y-8">
+<!-- Real-time Alerts Feed -->
+<section class="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] flex flex-col h-[400px]">
+<div class="px-6 py-4 border-b border-[#d3e1e3] dark:border-[#3a414b] flex items-center justify-between">
+<h2 class="text-base font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-accent-gold">security</span>
+                                    Security Feed
+                                </h2>
+<span class="size-2 rounded-full bg-accent-green shadow-[0_0_8px_#078834]"></span>
+</div>
+<div class="flex-1 overflow-y-auto p-4 space-y-3">
+<div class="p-3 bg-accent-red/10 border border-accent-red/20 rounded-lg">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-accent-red uppercase tracking-widest">Critical Alert</span>
+<span class="text-[10px] text-[#5a868c]">2m ago</span>
+</div>
+<p class="text-xs font-bold mb-1">Unusual SSH login attempt</p>
+<p class="text-[10px] text-[#5a868c] font-mono">Source IP: 192.168.1.104</p>
+</div>
+<div class="p-3 bg-accent-gold/10 border border-accent-gold/20 rounded-lg">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-accent-gold uppercase tracking-widest">Warning</span>
+<span class="text-[10px] text-[#5a868c]">15m ago</span>
+</div>
+<p class="text-xs font-bold mb-1">DB Connection Timeout</p>
+<p class="text-[10px] text-[#5a868c] font-mono">Instance: prod-db-01</p>
+</div>
+<div class="p-3 bg-[#e9f0f1]/30 dark:bg-[#1a1e23]/30 border border-[#d3e1e3] dark:border-[#3a414b] rounded-lg">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-[#5a868c] uppercase tracking-widest">System</span>
+<span class="text-[10px] text-[#5a868c]">1h ago</span>
+</div>
+<p class="text-xs font-bold mb-1">User 'admin_2' logged out</p>
+<p class="text-[10px] text-[#5a868c] font-mono">Session duration: 42m</p>
+</div>
+<div class="p-3 bg-[#e9f0f1]/30 dark:bg-[#1a1e23]/30 border border-[#d3e1e3] dark:border-[#3a414b] rounded-lg">
+<div class="flex justify-between items-start mb-1">
+<span class="text-[10px] font-bold text-[#5a868c] uppercase tracking-widest">System</span>
+<span class="text-[10px] text-[#5a868c]">3h ago</span>
+</div>
+<p class="text-xs font-bold mb-1">Auto-patch complete</p>
+<p class="text-[10px] text-[#5a868c] font-mono">Kernel v5.15.0-89-generic</p>
+</div>
+</div>
+</section>
+<!-- SA Account Management -->
+<section class="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] overflow-hidden">
+<div class="px-6 py-4 border-b border-[#d3e1e3] dark:border-[#3a414b] flex items-center justify-between">
+<h2 class="text-base font-bold flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">admin_panel_settings</span>
+                                    SA Accounts
+                                </h2>
+<button class="text-primary hover:bg-primary/10 p-1 rounded transition-colors">
+<span class="material-symbols-outlined text-xl">person_add</span>
+</button>
+</div>
+<div class="p-4 space-y-4">
+<div class="flex items-center justify-between p-3 rounded-lg border border-[#d3e1e3] dark:border-[#3a414b] bg-[#fcfdfc] dark:bg-[#2b313a]">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">JD</div>
+<div>
+<p class="text-xs font-bold">j.dawson_admin</p>
+<p class="text-[10px] text-[#5a868c]">Active 5m ago</p>
+</div>
+</div>
+<button class="text-[10px] font-bold text-accent-red hover:underline uppercase tracking-tighter">Revoke</button>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg border border-[#d3e1e3] dark:border-[#3a414b] bg-[#fcfdfc] dark:bg-[#2b313a]">
+<div class="flex items-center gap-3">
+<div class="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs">MK</div>
+<div>
+<p class="text-xs font-bold">m.knight_root</p>
+<p class="text-[10px] text-[#5a868c]">Active 2h ago</p>
+</div>
+</div>
+<button class="text-[10px] font-bold text-accent-red hover:underline uppercase tracking-tighter">Revoke</button>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg border border-[#d3e1e3] dark:border-[#3a414b] bg-[#fcfdfc] dark:bg-[#2b313a]">
+<div class="flex items-center gap-3 opacity-50">
+<div class="size-8 rounded-full bg-[#d3e1e3] dark:bg-[#3a414b] flex items-center justify-center text-[#5a868c] font-bold text-xs">SL</div>
+<div>
+<p class="text-xs font-bold line-through">s.lee_admin</p>
+<p class="text-[10px] text-accent-red">Access Revoked</p>
+</div>
+</div>
+<button class="text-[10px] font-bold text-primary hover:underline uppercase tracking-tighter">Restore</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+</div>
 
-              <section className="bg-[#24292f] rounded-xl border border-[#3a414b]">
-                <div className="px-6 py-4 border-b border-[#3a414b] font-bold text-sm">SA Accounts [cite: 12, 67]</div>
-                <div className="p-4 space-y-4">
-                  {saAccounts.map(acc => (
-                    <div key={acc.id} className="flex items-center justify-between p-3 border border-[#3a414b] rounded-lg bg-[#2b313a]">
-                      <div className={`flex items-center gap-3 ${!acc.active && 'opacity-50'}`}>
-                        <div className="h-8 w-8 rounded-full bg-[#1a535b]/20 flex items-center justify-center text-[#1a535b] text-xs font-bold">{acc.initial}</div>
-                        <div>
-                          <p className={`text-xs font-bold ${!acc.active && 'line-through'}`}>{acc.name}</p>
-                          <p className="text-[10px] text-[#5a868c]">{acc.status}</p>
-                        </div>
-                      </div>
-                      <button onClick={() => toggleAccountStatus(acc.id)} className={`text-[10px] font-bold uppercase hover:underline ${acc.active ? 'text-[#D85B42]' : 'text-[#1a535b]'}`}>
-                        {acc.active ? 'Revoke' : 'Restore'} [cite: 76, 106]
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            </div>
-          </div>
-        </div>
-      </main>
-    </div>
-  );
-};
-
-export default RootDashboard;
+</body></html>
