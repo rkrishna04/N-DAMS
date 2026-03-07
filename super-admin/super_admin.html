@@ -1,157 +1,220 @@
 <!DOCTYPE html>
-<html lang="en">
+<html class="dark" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin | Root Access</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>SA Management | System Root</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#1a535b",
+                        "background-light": "#fcfdfc",
+                        "background-dark": "#1a1e23",
+                        "surface-dark": "#24292f",
+                        "accent-gold": "#C8AA6E",
+                        "accent-red": "#D85B42",
+                        "accent-green": "#078834"
+                    },
+                    fontFamily: { "display": ["Manrope", "sans-serif"] }
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        body { font-family: 'Manrope', sans-serif; }
+        ::-webkit-scrollbar { width: 4px; }
+        ::-webkit-scrollbar-track { background: #1a1e23; }
+        ::-webkit-scrollbar-thumb { background: #1a535b; border-radius: 10px; }
+    </style>
 </head>
-<body class="bg-gray-900 flex text-slate-200">
+<body class="bg-background-light dark:bg-background-dark text-[#101819] dark:text-[#e9f0f1] font-display selection:bg-primary/30">
+    <div id="root"></div>
 
-    <aside class="w-64 bg-black h-screen sticky top-0 border-r border-slate-800 p-6 hidden md:block">
-        <div class="mb-10">
-            <h2 class="text-2xl font-bold text-red-500 flex items-center">
-                <i class="fa-solid fa-shield-halved mr-2"></i>ROOT
-            </h2>
-            <p class="text-[10px] text-slate-500 uppercase tracking-[0.2em]">System Infrastructure</p>
-        </div>
-        
-        <nav class="space-y-1">
-            <a href="#" class="flex items-center space-x-3 p-3 bg-red-600/10 text-red-500 border border-red-500/20 rounded-lg">
-                <i class="fa-solid fa-microchip"></i>
-                <span class="font-medium">System Health</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
-                <i class="fa-solid fa-users-gear"></i>
-                <span>Role Management</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
-                <i class="fa-solid fa-database"></i>
-                <span>Logs & Backups</span>
-            </a>
-            <a href="#" class="flex items-center space-x-3 p-3 text-slate-400 hover:bg-slate-800 hover:text-white rounded-lg transition">
-                <i class="fa-solid fa-sliders"></i>
-                <span>Global Settings</span>
-            </a>
-            <div class="pt-10 border-t border-slate-800 mt-10">
-                <button class="flex items-center space-x-3 p-3 text-slate-500 hover:text-red-400 w-full transition">
-                    <i class="fa-solid fa-lock-open"></i>
-                    <span>Exit Root</span>
-                </button>
-            </div>
-        </nav>
-    </aside>
+    <script type="text/babel">
+        const { useState } = React;
 
-    <main class="flex-1 p-8 overflow-y-auto">
-        <header class="flex justify-between items-center mb-10">
-            <div>
-                <h1 class="text-3xl font-extrabold text-white tracking-tight">System Infrastructure</h1>
-                <p class="text-slate-400">Node Status: <span class="text-green-500">Online & Optimized</span></p>
-            </div>
-            
-            <div class="flex items-center space-x-6">
-                <div class="text-right">
-                    <p class="text-xs text-slate-500 uppercase font-bold">Server Load</p>
-                    <div class="w-32 bg-slate-800 h-2 rounded-full mt-1">
-                        <div class="bg-red-500 h-2 rounded-full" style="width: 24%"></div>
-                    </div>
-                </div>
-                <div class="w-12 h-12 rounded-xl bg-gradient-to-tr from-red-600 to-orange-400 flex items-center justify-center text-white shadow-lg shadow-red-500/20">
-                    <i class="fa-solid fa-user-shield"></i>
-                </div>
-            </div>
-        </header>
+        const SAManagement = () => {
+            const [admins, setAdmins] = useState([
+                { id: 1, name: "Arjun_Dev", role: "Super Admin", region: "Vadodara", status: "Active", lastLogin: "10m ago" },
+                { id: 2, name: "Priya_Ops", role: "Network Admin", region: "Ahmedabad", status: "Active", lastLogin: "2h ago" },
+                { id: 3, name: "Rahul_Sec", role: "Security Analyst", region: "Surat", status: "Suspended", lastLogin: "5 days ago" }
+            ]);
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
-            <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
-                <div class="flex justify-between items-start mb-4">
-                    <i class="fa-solid fa-server text-blue-400 text-xl"></i>
-                    <span class="text-xs font-mono text-green-400">UP</span>
-                </div>
-                <p class="text-slate-400 text-sm">Active Database Instances</p>
-                <h3 class="text-2xl font-bold">14 / 15</h3>
-            </div>
-            <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
-                <div class="flex justify-between items-start mb-4">
-                    <i class="fa-solid fa-bolt text-yellow-400 text-xl"></i>
-                    <span class="text-xs font-mono text-slate-400">22ms</span>
-                </div>
-                <p class="text-slate-400 text-sm">Global API Latency</p>
-                <h3 class="text-2xl font-bold text-white">Optimal</h3>
-            </div>
-            <div class="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl">
-                <div class="flex justify-between items-start mb-4">
-                    <i class="fa-solid fa-bug text-red-400 text-xl"></i>
-                    <span class="text-xs font-mono text-red-400">High Priority</span>
-                </div>
-                <p class="text-slate-400 text-sm">Unresolved System Exceptions</p>
-                <h3 class="text-2xl font-bold">02</h3>
-            </div>
-        </div>
+            const toggleStatus = (id) => {
+                setAdmins(admins.map(admin => 
+                    admin.id === id ? { ...admin, status: admin.status === "Active" ? "Suspended" : "Active" } : admin
+                ));
+            };
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            
-            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden">
-                <div class="p-6 border-b border-slate-700 bg-slate-800/80 flex justify-between items-center">
-                    <h2 class="font-bold text-white">Admin & User Escalation</h2>
-                    <button class="text-xs bg-slate-700 hover:bg-slate-600 px-3 py-1 rounded text-slate-300 transition">View All Users</button>
-                </div>
-                <div class="p-4 space-y-4">
-                    <div class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded bg-indigo-500/20 text-indigo-400 flex items-center justify-center font-bold text-xs">MA</div>
-                            <div>
-                                <p class="text-sm font-medium">Mark Anderson</p>
-                                <p class="text-[10px] text-slate-500">Current Role: <span class="text-indigo-400">Admin</span></p>
+            const deleteAdmin = (id) => {
+                if(confirm("Confirm permanent removal of admin credentials?")) {
+                    setAdmins(admins.filter(admin => admin.id !== id));
+                }
+            };
+
+            return (
+                <div className="flex h-screen overflow-hidden">
+                    {/* --- SIDEBAR --- */}
+                    <aside className="w-64 flex-shrink-0 border-r border-[#d3e1e3] dark:border-[#2b313a] flex flex-col bg-background-light dark:bg-background-dark">
+                        <div className="p-6">
+                            <div className="flex items-center gap-3 mb-8">
+                                <div className="size-8 bg-primary rounded-lg flex items-center justify-center text-white">
+                                    <span className="material-symbols-outlined">terminal</span>
+                                </div>
+                                <div>
+                                    <h1 className="text-lg font-bold leading-tight">System Root</h1>
+                                    <p className="text-xs text-[#5a868c]">v4.2.0-stable</p>
+                                </div>
+                            </div>
+                            <nav className="space-y-1">
+                                <a href="root.html" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#5a868c] hover:bg-[#e9f0f1] dark:hover:bg-[#2b313a]">
+                                    <span className="material-symbols-outlined text-sm">dashboard</span>
+                                    <span className="text-sm">Overview</span>
+                                </a>
+                                <a href="backup.html" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#5a868c] hover:bg-[#e9f0f1] dark:hover:bg-[#2b313a]">
+                                    <span className="material-symbols-outlined text-sm">database</span>
+                                    <span className="text-sm">System Backup</span>
+                                </a>
+                                <a href="sa.html" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-primary/10 text-primary dark:text-[#e9f0f1] font-semibold border-l-4 border-primary">
+                                    <span className="material-symbols-outlined text-sm">shield_person</span>
+                                    <span className="text-sm">SA Management</span>
+                                </a>
+                            </nav>
+                        </div>
+                    </aside>
+
+                    {/* --- MAIN CONTENT --- */}
+                    <main className="flex-1 flex flex-col overflow-hidden bg-[#f9fbfb] dark:bg-background-dark">
+                        <header className="h-16 border-b border-[#d3e1e3] dark:border-[#2b313a] flex items-center justify-between px-8 bg-background-light dark:bg-background-dark">
+                            <div className="flex items-center gap-4">
+                                <span className="text-sm font-medium text-[#5a868c]">Path:</span>
+                                <div className="text-xs font-mono bg-[#e9f0f1] dark:bg-[#2b313a] px-3 py-1 rounded border border-[#d3e1e3] dark:border-[#3a414b]">
+                                    root <span className="mx-2 opacity-50">/</span> auth <span className="mx-2 opacity-50">/</span> sa-manager
+                                </div>
+                            </div>
+                        </header>
+
+                        <div className="flex-1 overflow-y-auto p-8 space-y-8">
+                            {/* Header Section */}
+                            <div className="flex justify-between items-end">
+                                <div>
+                                    <h2 className="text-3xl font-black tracking-tighter">Administrator Controls</h2>
+                                    <p className="text-[#5a868c]">Manage high-level access and regional permissions for Western Railway clusters.</p>
+                                </div>
+                                <button className="bg-primary text-white px-6 py-2.5 rounded-lg font-bold text-sm flex items-center gap-2 hover:bg-primary/90 transition-all">
+                                    <span className="material-symbols-outlined text-sm">person_add</span>
+                                    PROVISION NEW ADMIN
+                                </button>
+                            </div>
+
+                            {/* Admin Table */}
+                            <section className="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] overflow-hidden shadow-sm">
+                                <table className="w-full text-left">
+                                    <thead className="bg-[#e9f0f1]/30 dark:bg-[#1a1e23]/30 text-[#5a868c] text-[10px] uppercase font-bold">
+                                        <tr>
+                                            <th className="px-6 py-4">Identity</th>
+                                            <th className="px-6 py-4">Designation</th>
+                                            <th className="px-6 py-4">Zone / Region</th>
+                                            <th className="px-6 py-4">Status</th>
+                                            <th className="px-6 py-4 text-right">Operations</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-[#d3e1e3] dark:divide-[#3a414b]">
+                                        {admins.map(admin => (
+                                            <tr key={admin.id} className={`hover:bg-primary/5 transition-colors ${admin.status === 'Suspended' ? 'opacity-60' : ''}`}>
+                                                <td className="px-6 py-4">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="size-8 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold text-xs uppercase">
+                                                            {admin.name.substring(0,2)}
+                                                        </div>
+                                                        <div>
+                                                            <p className="text-sm font-bold">{admin.name}</p>
+                                                            <p className="text-[10px] text-[#5a868c]">Last Login: {admin.lastLogin}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                                <td className="px-6 py-4 text-xs font-mono font-semibold">{admin.role}</td>
+                                                <td className="px-6 py-4 text-xs">{admin.region}</td>
+                                                <td className="px-6 py-4">
+                                                    <span className={`px-2 py-1 rounded text-[10px] font-bold uppercase ${
+                                                        admin.status === 'Active' ? 'bg-accent-green/10 text-accent-green' : 'bg-accent-red/10 text-accent-red'
+                                                    }`}>
+                                                        {admin.status}
+                                                    </span>
+                                                </td>
+                                                <td className="px-6 py-4 text-right space-x-4">
+                                                    <button 
+                                                        onClick={() => toggleStatus(admin.id)}
+                                                        className="text-[10px] font-bold text-primary uppercase hover:underline"
+                                                    >
+                                                        {admin.status === 'Active' ? 'Suspend' : 'Activate'}
+                                                    </button>
+                                                    <button 
+                                                        onClick={() => deleteAdmin(admin.id)}
+                                                        className="text-[10px] font-bold text-accent-red uppercase hover:underline"
+                                                    >
+                                                        Revoke
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </section>
+
+                            {/* System Permissions Audit */}
+                            <div className="grid grid-cols-2 gap-8">
+                                <section className="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] p-6">
+                                    <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-accent-gold">security_update_good</span>
+                                        Permission Matrix
+                                    </h3>
+                                    <div className="space-y-3">
+                                        <div className="flex justify-between items-center p-3 bg-[#e9f0f1]/50 dark:bg-[#1a1e23]/50 rounded border border-[#d3e1e3] dark:border-[#3a414b]">
+                                            <span className="text-xs">Database Structural Changes</span>
+                                            <span className="text-[10px] font-bold text-accent-red bg-accent-red/10 px-2 py-0.5 rounded">ROOT ONLY</span>
+                                        </div>
+                                        <div className="flex justify-between items-center p-3 bg-[#e9f0f1]/50 dark:bg-[#1a1e23]/50 rounded border border-[#d3e1e3] dark:border-[#3a414b]">
+                                            <span className="text-xs">User Role Promotion</span>
+                                            <span className="text-[10px] font-bold text-accent-green bg-accent-green/10 px-2 py-0.5 rounded">SUPER ADMIN</span>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                <section className="bg-background-light dark:bg-surface-dark rounded-xl border border-[#d3e1e3] dark:border-[#3a414b] p-6">
+                                    <h3 className="text-sm font-bold mb-4 flex items-center gap-2">
+                                        <span className="material-symbols-outlined text-primary">analytics</span>
+                                        Access Density
+                                    </h3>
+                                    <div className="h-24 flex items-end gap-2">
+                                        {[40, 70, 45, 90, 65, 80, 50].map((h, i) => (
+                                            <div key={i} className="flex-1 bg-primary/20 rounded-t group relative">
+                                                <div style={{ height: `${h}%` }} className="bg-primary rounded-t group-hover:bg-accent-gold transition-all"></div>
+                                            </div>
+                                        ))}
+                                    </div>
+                                    <p className="text-[10px] text-center text-[#5a868c] mt-2 uppercase font-bold">Admin Activity (Last 7 Days)</p>
+                                </section>
                             </div>
                         </div>
-                        <select class="bg-slate-800 text-xs border border-slate-600 rounded p-1 outline-none">
-                            <option>Admin</option>
-                            <option>Super Admin</option>
-                            <option>Normal User</option>
-                        </select>
-                    </div>
-                    <div class="flex items-center justify-between p-3 bg-slate-900/50 rounded-xl border border-slate-700/50">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded bg-emerald-500/20 text-emerald-400 flex items-center justify-center font-bold text-xs">SW</div>
-                            <div>
-                                <p class="text-sm font-medium">Sarah White</p>
-                                <p class="text-[10px] text-slate-500">Current Role: <span class="text-emerald-400">Normal User</span></p>
-                            </div>
-                        </div>
-                        <select class="bg-slate-800 text-xs border border-slate-600 rounded p-1 outline-none">
-                            <option>Normal User</option>
-                            <option>Admin</option>
-                            <option>Super Admin</option>
-                        </select>
-                    </div>
+                    </main>
                 </div>
-            </div>
+            );
+        };
 
-            <div class="bg-slate-800/50 border border-slate-700 rounded-2xl overflow-hidden">
-                <div class="p-6 border-b border-slate-700 bg-slate-800/80">
-                    <h2 class="font-bold text-white">Security Audit Trail</h2>
-                </div>
-                <div class="p-6 font-mono text-[11px] space-y-3">
-                    <div class="flex space-x-3">
-                        <span class="text-slate-500">[14:22:01]</span>
-                        <span class="text-amber-400">WARN:</span>
-                        <span class="text-slate-300">Unauthorized login attempt from IP 192.168.1.45</span>
-                    </div>
-                    <div class="flex space-x-3">
-                        <span class="text-slate-500">[13:45:12]</span>
-                        <span class="text-blue-400">INFO:</span>
-                        <span class="text-slate-300">User #8821 (Admin) deleted 4 records from 'Revenue' table</span>
-                    </div>
-                    <div class="flex space-x-3">
-                        <span class="text-slate-500">[12:10:55]</span>
-                        <span class="text-green-400">SYS:</span>
-                        <span class="text-slate-300">Automated backup of Database 'PROD_v2' completed successfully</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<SAManagement />);
+    </script>
 </body>
 </html>
