@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>N-DAMS | Unified Command</title>
+    <title>N-DAMS | Specialized Command</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -13,15 +13,13 @@
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: drift linear infinite; }
         
         .glass-sidebar { background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(15px); border-right: 1px solid rgba(255, 255, 255, 0.08); }
-        .module-btn { background: rgba(70, 131, 180, 0.2); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .module-btn:hover { transform: scale(1.08); border-color: rgba(255, 255, 255, 0.4); }
+        .module-btn { background: rgba(70, 131, 180, 0.15); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.1); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .module-btn:hover { transform: scale(1.05); border-color: rgba(255, 255, 255, 0.4); box-shadow: 0 0 20px rgba(59, 130, 246, 0.3); }
         
-        .glow-blue:hover { box-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
-        .glow-purple:hover { box-shadow: 0 0 20px rgba(168, 85, 247, 0.5); }
-        .glow-cyan:hover { box-shadow: 0 0 20px rgba(6, 182, 212, 0.5); }
-        .glow-emerald:hover { box-shadow: 0 0 20px rgba(16, 185, 129, 0.5); }
+        /* Special Styling for User-Created Modules */
+        .custom-node { background: rgba(168, 85, 247, 0.2); border: 1px solid rgba(168, 85, 247, 0.4) !important; }
+        .custom-node:hover { box-shadow: 0 0 25px rgba(168, 85, 247, 0.5); }
 
-        /* Light Theme Overlay for Management */
         .management-view { display: none; background: #f8fafc; color: #1e293b; min-height: 100vh; position: absolute; top: 0; left: 0; width: 100%; z-index: 50; }
         .glass-panel { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(0, 0, 0, 0.05); }
     </style>
@@ -37,29 +35,35 @@
                 <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em] font-bold">Admin Access</p>
             </div>
             <nav class="space-y-3">
-                <a href="#" class="flex items-center space-x-3 p-3 bg-indigo-600/20 border border-indigo-500/30 text-indigo-300 rounded-xl">
-                    <i class="fa-solid fa-rocket"></i><span class="text-sm">Management Hub</span>
-                </a>
-                <button onclick="localStorage.clear(); location.reload();" class="text-[10px] text-rose-400/50 hover:text-rose-400 mt-20 block uppercase tracking-widest font-bold">Wipe System Data</button>
+                <button onclick="createNewModule()" class="w-full flex items-center space-x-3 p-3 bg-emerald-600/20 border border-emerald-500/30 text-emerald-300 rounded-xl hover:bg-emerald-600/40 transition">
+                    <i class="fa-solid fa-plus-circle"></i><span class="text-sm font-bold">Create New Module</span>
+                </button>
+                <button onclick="localStorage.clear(); location.reload();" class="text-[10px] text-rose-400/50 hover:text-rose-400 mt-20 block uppercase tracking-widest font-bold">Wipe System</button>
             </nav>
         </aside>
 
         <main class="flex-1 p-8">
             <header class="flex justify-between items-center mb-10">
                 <div>
-                    <h1 class="text-3xl font-bold text-white tracking-tight">Admin Control Center</h1>
-                    <p class="text-slate-400">Data is a blur until you have the right optics.</p>
+                    <h1 class="text-3xl font-bold text-white tracking-tight">Control Center</h1>
+                    <p class="text-slate-400">Manage standard streams or <span class="text-purple-400">deploy custom nodes.</span></p>
                 </div>
-                <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold border border-white/20">AD</div>
             </header>
+
+            <section id="customSection" class="mb-12 hidden">
+                <div class="flex items-center space-x-4 mb-6">
+                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-purple-400 whitespace-nowrap">Your Created Modules</h2>
+                    <div class="h-px w-full bg-gradient-to-r from-purple-500/50 to-transparent"></div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-5" id="customGrid"></div>
+            </section>
 
             <section>
                 <div class="flex items-center space-x-4 mb-8">
-                    <div class="h-px w-full bg-gradient-to-r from-indigo-500/50 to-transparent"></div>
-                    <h2 class="text-sm font-black uppercase tracking-[0.4em] text-indigo-400 whitespace-nowrap">Quick Module Access</h2>
+                    <h2 class="text-xs font-black uppercase tracking-[0.4em] text-indigo-400 whitespace-nowrap">Standard System Modules</h2>
                     <div class="h-px w-full bg-gradient-to-r from-indigo-500/50 to-transparent"></div>
                 </div>
-                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5" id="moduleGrid"></div>
+                <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-5" id="standardGrid"></div>
             </section>
         </main>
     </div>
@@ -67,52 +71,38 @@
     <div id="mgmtView" class="management-view p-4 md:p-8">
         <header class="flex justify-between items-center mb-8 max-w-7xl mx-auto">
             <div class="flex items-center space-x-4">
-                <button onclick="closeManagement()" class="glass-panel p-3 rounded-xl text-indigo-600 hover:bg-white transition shadow-sm">
-                    <i class="fa-solid fa-arrow-left"></i>
-                </button>
-                <div>
-                    <h1 id="activeModTitle" class="text-2xl font-bold uppercase text-slate-900 tracking-tight">MODULE</h1>
-                    <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em]">Stream purification active.</p>
-                </div>
+                <button onclick="closeManagement()" class="glass-panel p-3 rounded-xl text-indigo-600 hover:bg-white transition"><i class="fa-solid fa-arrow-left"></i></button>
+                <h1 id="activeModTitle" class="text-2xl font-bold uppercase text-slate-900 tracking-tight">MODULE</h1>
             </div>
-            <button onclick="openModal()" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-lg text-xs font-bold shadow-lg transition-all">
-                + Add New Record
-            </button>
+            <button onclick="openModal()" class="bg-indigo-600 text-white px-6 py-2 rounded-lg text-xs font-bold shadow-lg">+ Add Record</button>
         </header>
-
         <div class="glass-panel rounded-3xl overflow-hidden shadow-xl max-w-7xl mx-auto border border-black/5">
-            <table class="w-full text-left border-collapse">
-                <thead>
-                    <tr class="bg-indigo-50/50 text-indigo-700 uppercase text-[10px] font-black tracking-widest">
-                        <th class="p-4 border-b">Sr.</th>
-                        <th class="p-4 border-b">Zone</th>
-                        <th class="p-4 border-b">Node Name</th>
-                        <th class="p-4 border-b">Profile</th>
-                        <th class="p-4 border-b text-center">Actions</th>
-                    </tr>
+            <table class="w-full text-left">
+                <thead class="bg-indigo-50/50 text-indigo-700 text-[10px] font-black uppercase tracking-widest">
+                    <tr><th class="p-4">Sr.</th><th class="p-4">Zone</th><th class="p-4">Node</th><th class="p-4">Profile</th><th class="p-4 text-center">Action</th></tr>
                 </thead>
-                <tbody id="tableBody" class="text-[11px] font-medium text-slate-600 divide-y divide-black/5"></tbody>
+                <tbody id="tableBody" class="text-[11px] divide-y divide-black/5"></tbody>
             </table>
         </div>
     </div>
 
     <div id="entryModal" class="hidden fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm items-center justify-center p-4">
-        <div class="bg-white rounded-3xl shadow-2xl max-w-md w-full p-8">
-            <h3 class="text-xl font-bold text-slate-900 mb-6">New Data Entry</h3>
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full">
+            <h3 class="text-xl font-bold mb-6">New Entry</h3>
             <div class="space-y-4">
-                <input id="inZone" type="text" placeholder="Zone (e.g. CR)" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 ring-indigo-500 outline-none">
-                <input id="inNode" type="text" placeholder="Node Name" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 ring-indigo-500 outline-none">
-                <input id="inProfile" type="text" placeholder="Profile Details" class="w-full border border-slate-200 rounded-xl p-3 text-sm focus:ring-2 ring-indigo-500 outline-none">
+                <input id="inZone" type="text" placeholder="Zone" class="w-full border p-3 rounded-xl outline-none focus:ring-2 ring-indigo-500">
+                <input id="inNode" type="text" placeholder="Node Name" class="w-full border p-3 rounded-xl outline-none focus:ring-2 ring-indigo-500">
+                <input id="inProfile" type="text" placeholder="Profile" class="w-full border p-3 rounded-xl outline-none focus:ring-2 ring-indigo-500">
                 <div class="flex space-x-3 pt-4">
-                    <button onclick="closeModal()" class="flex-1 py-3 text-xs font-bold uppercase text-slate-400">Cancel</button>
-                    <button onclick="saveData()" class="flex-1 py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold uppercase">Save</button>
+                    <button onclick="closeModal()" class="flex-1 py-3 text-xs font-bold text-slate-400">CANCEL</button>
+                    <button onclick="saveData()" class="flex-1 py-3 bg-indigo-600 text-white rounded-xl text-xs font-bold">SAVE RECORD</button>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // 1. STARFIELD ENGINE
+        // Starfield
         const starField = document.getElementById('starField');
         for (let i = 0; i < 150; i++) {
             const star = document.createElement('div');
@@ -124,32 +114,56 @@
             starField.appendChild(star);
         }
 
-        // 2. GALAXY HUB ENGINE
-        const modules = [
-            'FOIS', 'EARTH', 'FC', 'TCS', 'UTS', 'PRS', 'COIS', 'ICMS', 'CMS', 'RMS',
-            'SATS', 'BMS', 'LMS', 'VMS', 'NMS', 'TMS', 'ZMS', 'GMS', 'FMS', 'WMS',
-            'A-1', 'B-2', 'C-3', 'ALPHA', 'BETA', 'GAMMA', 'DELTA', 'SIGMA', 'OMEGA', 'ZETA',
-            'CORE', 'NODE', 'LINK', 'SITE', 'PORT', 'HUB', 'GRID', 'FLOW', 'BASE', 'APEX'
-        ];
-
-        const grid = document.getElementById('moduleGrid');
+        const standardModules = ['FOIS', 'EARTH', 'FC', 'TCS', 'UTS', 'PRS', 'CMS', 'RMS'];
         let currentActiveModule = '';
 
-        modules.forEach((mod) => {
-            const themes = [
-                {c: 'text-blue-400', g: 'glow-blue'}, {c: 'text-purple-400', g: 'glow-purple'},
-                {c: 'text-cyan-400', g: 'glow-cyan'}, {c: 'text-emerald-400', g: 'glow-emerald'}
-            ];
-            const theme = themes[Math.floor(Math.random() * themes.length)];
-            const btn = document.createElement('button');
-            btn.className = `module-btn py-6 px-4 rounded-2xl flex flex-col items-center justify-center space-y-3 group ${theme.g}`;
-            btn.innerHTML = `<i class="fa-solid fa-atom ${theme.c} text-2xl group-hover:rotate-180 transition-all duration-700"></i>
-                             <span class="text-[11px] font-black tracking-widest text-white uppercase">${mod}</span>`;
-            btn.onclick = () => openManagement(mod);
-            grid.appendChild(btn);
-        });
+        function renderHub() {
+            const stdGrid = document.getElementById('standardGrid');
+            const customGrid = document.getElementById('customGrid');
+            const customSection = document.getElementById('customSection');
+            
+            stdGrid.innerHTML = '';
+            customGrid.innerHTML = '';
 
-        // 3. DATA MANAGEMENT ENGINE
+            // Load Custom Modules from LocalStorage
+            const customModules = JSON.parse(localStorage.getItem('user_created_modules')) || [];
+            
+            if (customModules.length > 0) {
+                customSection.classList.remove('hidden');
+                customModules.forEach(mod => {
+                    customGrid.appendChild(createModuleBtn(mod, true));
+                });
+            } else {
+                customSection.classList.add('hidden');
+            }
+
+            standardModules.forEach(mod => {
+                stdGrid.appendChild(createModuleBtn(mod, false));
+            });
+        }
+
+        function createModuleBtn(name, isCustom) {
+            const btn = document.createElement('button');
+            btn.className = `module-btn py-6 px-4 rounded-2xl flex flex-col items-center justify-center space-y-3 group ${isCustom ? 'custom-node' : ''}`;
+            btn.innerHTML = `<i class="fa-solid ${isCustom ? 'fa-microchip text-purple-400' : 'fa-atom text-blue-400'} text-2xl group-hover:rotate-180 transition-all duration-500"></i>
+                             <span class="text-[11px] font-black tracking-widest text-white uppercase">${name}</span>`;
+            btn.onclick = () => openManagement(name);
+            return btn;
+        }
+
+        function createNewModule() {
+            const name = prompt("Enter Name for New Custom Module:");
+            if (name) {
+                const customModules = JSON.parse(localStorage.getItem('user_created_modules')) || [];
+                const upperName = name.toUpperCase().trim();
+                if(!customModules.includes(upperName)) {
+                    customModules.push(upperName);
+                    localStorage.setItem('user_created_modules', JSON.stringify(customModules));
+                    renderHub();
+                }
+            }
+        }
+
         function openManagement(modName) {
             currentActiveModule = modName;
             document.getElementById('activeModTitle').innerText = modName;
@@ -166,26 +180,17 @@
         function renderTable() {
             const tableBody = document.getElementById('tableBody');
             const data = JSON.parse(localStorage.getItem(`ndams_${currentActiveModule}`)) || [];
-            
-            if(data.length === 0) {
-                tableBody.innerHTML = `<tr><td colspan="5" class="p-10 text-center text-slate-400 italic">No records in ${currentActiveModule} stream.</td></tr>`;
-                return;
-            }
-
-            tableBody.innerHTML = data.map((item, index) => `
-                <tr class="hover:bg-indigo-50/50 transition">
-                    <td class="p-4 font-mono text-slate-300">${index + 1}</td>
-                    <td class="p-4 font-bold text-slate-800">${item.zone}</td>
+            tableBody.innerHTML = data.length ? data.map((item, index) => `
+                <tr class="hover:bg-indigo-50/50">
+                    <td class="p-4 text-slate-300 font-mono">${index + 1}</td>
+                    <td class="p-4 font-bold">${item.zone}</td>
                     <td class="p-4 font-black text-indigo-900">${item.node}</td>
                     <td class="p-4 text-slate-500">${item.profile}</td>
-                    <td class="p-4 text-center">
-                        <button onclick="deleteRow(${index})" class="text-rose-400 hover:text-rose-600 p-2"><i class="fa-solid fa-trash-can"></i></button>
-                    </td>
+                    <td class="p-4 text-center"><button onclick="deleteRow(${index})" class="text-rose-400"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
-            `).join('');
+            `).join('') : `<tr><td colspan="5" class="p-10 text-center text-slate-400">No data found.</td></tr>`;
         }
 
-        // 4. MODAL & STORAGE LOGIC
         const modal = document.getElementById('entryModal');
         function openModal() { modal.classList.replace('hidden', 'flex'); }
         function closeModal() { modal.classList.replace('flex', 'hidden'); }
@@ -194,28 +199,24 @@
             const zone = document.getElementById('inZone').value;
             const node = document.getElementById('inNode').value;
             const profile = document.getElementById('inProfile').value;
-
-            if(!zone || !node) return alert("Zone and Node Name are required.");
-
+            if(!zone || !node) return;
             const storageKey = `ndams_${currentActiveModule}`;
             const data = JSON.parse(localStorage.getItem(storageKey)) || [];
             data.push({ zone, node, profile });
             localStorage.setItem(storageKey, JSON.stringify(data));
-
-            document.querySelectorAll('#entryModal input').forEach(i => i.value = '');
+            document.querySelectorAll('input').forEach(i => i.value = '');
             closeModal();
             renderTable();
         }
 
         function deleteRow(index) {
-            if(confirm("Purge this record from the stream?")) {
-                const storageKey = `ndams_${currentActiveModule}`;
-                const data = JSON.parse(localStorage.getItem(storageKey));
-                data.splice(index, 1);
-                localStorage.setItem(storageKey, JSON.stringify(data));
-                renderTable();
-            }
+            const data = JSON.parse(localStorage.getItem(`ndams_${currentActiveModule}`));
+            data.splice(index, 1);
+            localStorage.setItem(`ndams_${currentActiveModule}`, JSON.stringify(data));
+            renderTable();
         }
+
+        renderHub();
     </script>
 </body>
 </html>
