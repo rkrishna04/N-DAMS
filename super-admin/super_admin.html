@@ -1,193 +1,146 @@
 <!DOCTYPE html>
 <html class="dark" lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>Super Admin Dashboard | NOCC Western Railway</title>
-    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>User Management | NOCC SA Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-    
-    <script id="tailwind-config">
-        tailwind.config = {
-            darkMode: "class",
-            theme: {
-                extend: {
-                    colors: {
-                        "primary": "#1a535b",
-                        "background-dark": "#0f1216",
-                        "surface-dark": "#1a1e23",
-                        "accent-gold": "#C8AA6E",
-                        "accent-green": "#078834",
-                        "accent-blue": "#2d6cdf"
-                    },
-                    fontFamily: { "display": ["Manrope", "sans-serif"] }
-                },
-            },
-        }
-    </script>
-    <style>
-        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
-        body { font-family: 'Manrope', sans-serif; }
-        .glass-panel { background: rgba(26, 30, 35, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(211, 225, 227, 0.1); }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet"/>
 </head>
-<body class="bg-background-dark text-[#e9f0f1] font-display">
+<body class="bg-[#0b0e11] text-gray-200 font-sans">
     <div id="root"></div>
 
     <script type="text/babel">
-        const { useState, useEffect } = React;
+        const { useState } = React;
 
-        const SADashboard = () => {
-            const [stations, setStations] = useState([
-                { id: "BRC", name: "Vadodara Jn", status: "Critical", health: 42, alerts: 12 },
-                { id: "ADI", name: "Ahmedabad", status: "Optimal", health: 98, alerts: 0 },
-                { id: "ST", name: "Surat", status: "Warning", health: 76, alerts: 3 },
-                { id: "RJT", name: "Rajkot", status: "Optimal", health: 94, alerts: 1 }
-            ]);
+        const UserManagement = () => {
+            const [userType, setUserType] = useState('NORMAL'); // 'NORMAL' or 'ADMIN'
+            const [users, setUsers] = useState([]);
+            const [formData, setFormData] = useState({
+                name: '', email: '', phone: '', dept: '', post: '', password: ''
+            });
+
+            const handleCreate = (e) => {
+                e.preventDefault();
+                const permissions = userType === 'ADMIN' 
+                    ? "View, Modify, Generate Reports" 
+                    : "View Data Only";
+                
+                const newUser = { ...formData, type: userType, permissions, id: Date.now() };
+                setUsers([newUser, ...users]);
+                
+                // Reset form
+                setFormData({ name: '', email: '', phone: '', dept: '', post: '', password: '' });
+                alert(`${userType} Created Successfully with ${permissions} permissions.`);
+            };
 
             return (
-                <div className="flex h-screen overflow-hidden">
-                    {/* SA Side Nav */}
-                    <aside className="w-20 hover:w-64 transition-all duration-300 flex-shrink-0 border-r border-[#2b313a] flex flex-col bg-surface-dark group overflow-hidden">
-                        <div className="p-6">
-                            <div className="flex items-center gap-4 mb-10">
-                                <div className="size-8 bg-accent-blue rounded flex-shrink-0 flex items-center justify-center text-white">
-                                    <span className="material-symbols-outlined text-sm">shield_person</span>
-                                </div>
-                                <span className="font-bold opacity-0 group-hover:opacity-100 whitespace-nowrap transition-opacity">SA PORTAL</span>
-                            </div>
-                            <nav className="space-y-4">
-                                <NavItem icon="analytics" label="Zonal Insights" active />
-                                <NavItem icon="train" label="Station Assets" />
-                                <NavItem icon="group" label="Field Staff" />
-                                <NavItem icon="description" label="Operational Reports" />
-                            </nav>
-                        </div>
+                <div className="flex h-screen">
+                    {/* Sidebar */}
+                    <aside className="w-64 border-r border-white/5 p-6 bg-[#0f1216]">
+                        <div className="text-amber-500 font-black text-xl mb-10">NOCC SA</div>
+                        <nav className="space-y-2">
+                            <a href="sa.html" className="block p-3 text-gray-400 hover:text-white">Zonal Dashboard</a>
+                            <div className="p-3 bg-amber-500/10 text-amber-500 rounded-lg font-bold border-l-4 border-amber-500">User Management</div>
+                            <a href="root.html" className="block p-3 text-gray-400 hover:text-white">System Root</a>
+                        </nav>
                     </aside>
 
-                    {/* Main Interface */}
-                    <main className="flex-1 flex flex-col overflow-hidden">
-                        <header className="h-16 border-b border-[#2b313a] flex items-center justify-between px-8 glass-panel z-10">
-                            <div className="flex items-center gap-4">
-                                <h1 className="text-sm font-bold tracking-widest text-[#5a868c]">WESTERN RAILWAY <span className="text-white">/ VADODARA ZONE</span></h1>
-                            </div>
-                            <div className="flex items-center gap-6">
-                                <div className="text-right">
-                                    <p className="text-xs font-bold leading-none">Super Admin 04</p>
-                                    <p className="text-[9px] text-accent-blue uppercase font-black mt-1">Regional Command</p>
+                    {/* Main Content */}
+                    <main className="flex-1 p-10 overflow-y-auto">
+                        <h1 className="text-3xl font-black mb-8">Provisioning Portal</h1>
+
+                        <div className="grid grid-cols-12 gap-10">
+                            {/* Creation Form */}
+                            <section className="col-span-5 bg-[#161a1f] p-8 rounded-2xl border border-white/5">
+                                <h2 className="text-lg font-bold mb-6 text-amber-500">Create New Account</h2>
+                                
+                                <div className="flex gap-4 mb-8">
+                                    <button 
+                                        onClick={() => setUserType('NORMAL')}
+                                        className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${userType === 'NORMAL' ? 'bg-amber-500 text-black' : 'bg-white/5 text-gray-500'}`}>
+                                        NORMAL USER
+                                    </button>
+                                    <button 
+                                        onClick={() => setUserType('ADMIN')}
+                                        className={`flex-1 py-2 rounded-lg text-xs font-bold transition-all ${userType === 'ADMIN' ? 'bg-blue-500 text-white' : 'bg-white/5 text-gray-500'}`}>
+                                        ADMIN
+                                    </button>
                                 </div>
-                                <div className="size-10 rounded-full border border-accent-blue bg-primary flex items-center justify-center font-bold text-xs">SA</div>
-                            </div>
-                        </header>
 
-                        <div className="flex-1 overflow-y-auto p-8 space-y-8">
-                            {/* Executive Summary */}
-                            <div className="grid grid-cols-4 gap-6">
-                                <SummaryCard icon="router" label="Active Assets" value="1,248" trend="+14" />
-                                <SummaryCard icon="warning" label="Pending Alerts" value="26" trend="-2" color="text-accent-gold" />
-                                <SummaryCard icon="engineering" label="Teams In Field" value="08" trend="Stable" />
-                                <SummaryCard icon="wifi_tethering" label="Network Uptime" value="99.9%" trend="Nominal" color="text-accent-green" />
-                            </div>
-
-                            {/* Zonal Asset Map & Critical List */}
-                            <div className="grid grid-cols-12 gap-8">
-                                {/* Station Monitoring */}
-                                <div className="col-span-8 space-y-4">
-                                    <div className="flex items-center justify-between">
-                                        <h3 className="text-lg font-bold">Regional Asset Health</h3>
-                                        <button className="text-xs text-accent-blue font-bold uppercase hover:underline">View Map Mode</button>
-                                    </div>
+                                <form onSubmit={handleCreate} className="space-y-4">
+                                    <input required placeholder="Full Name" className="w-full bg-black/40 border border-white/10 p-3 rounded-lg text-sm" 
+                                        value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} />
+                                    
                                     <div className="grid grid-cols-2 gap-4">
-                                        {stations.map(stn => (
-                                            <div key={stn.id} className="p-5 rounded-xl border border-[#2b313a] bg-surface-dark hover:border-accent-blue transition-all cursor-pointer">
-                                                <div className="flex justify-between items-start mb-4">
-                                                    <div>
-                                                        <h4 className="font-bold text-lg">{stn.name}</h4>
-                                                        <p className="text-[10px] text-[#5a868c] font-mono tracking-widest">{stn.id} NODE</p>
-                                                    </div>
-                                                    <span className={`px-2 py-0.5 rounded text-[10px] font-black uppercase ${
-                                                        stn.status === 'Critical' ? 'bg-accent-red/20 text-red-500' : 
-                                                        stn.status === 'Warning' ? 'bg-accent-gold/20 text-accent-gold' : 'bg-accent-green/20 text-accent-green'
-                                                    }`}>{stn.status}</span>
-                                                </div>
-                                                <div className="space-y-2">
-                                                    <div className="flex justify-between text-[10px] font-bold">
-                                                        <span>SYSTEM HEALTH</span>
-                                                        <span>{stn.health}%</span>
-                                                    </div>
-                                                    <div className="h-1.5 w-full bg-background-dark rounded-full overflow-hidden">
-                                                        <div 
-                                                            style={{ width: `${stn.health}%` }} 
-                                                            className={`h-full transition-all duration-1000 ${
-                                                                stn.health < 50 ? 'bg-red-500' : stn.health < 80 ? 'bg-accent-gold' : 'bg-accent-green'
-                                                            }`}
-                                                        ></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        ))}
+                                        <input required type="email" placeholder="Email Address" className="bg-black/40 border border-white/10 p-3 rounded-lg text-sm" 
+                                            value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})} />
+                                        <input required type="tel" placeholder="Phone Number" className="bg-black/40 border border-white/10 p-3 rounded-lg text-sm" 
+                                            value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})} />
                                     </div>
-                                </div>
 
-                                {/* Live Operational Feed */}
-                                <div className="col-span-4 flex flex-col h-full">
-                                    <h3 className="text-lg font-bold mb-4">Live Ops Feed</h3>
-                                    <div className="flex-1 rounded-xl border border-[#2b313a] bg-surface-dark/50 p-4 overflow-y-auto space-y-4">
-                                        <FeedItem time="12:40" user="BRC_ADMIN" msg="OFC Link repair initiated at Vadodara Yard." type="action" />
-                                        <FeedItem time="11:15" user="SYSTEM" msg="Scheduled backup successful for ADI cluster." type="system" />
-                                        <FeedItem time="10:02" user="ADI_ADMIN" msg="Node Ahmedabad-04 report generated." type="report" />
-                                        <FeedItem time="09:45" user="SURAT_OPS" msg="High latency detected on Surat-South node." type="alert" />
+                                    <div className="grid grid-cols-2 gap-4">
+                                        <select className="bg-black/40 border border-white/10 p-3 rounded-lg text-sm" 
+                                            value={formData.dept} onChange={e => setFormData({...formData, dept: e.target.value})}>
+                                            <option>Department</option>
+                                            <option>Signal & Telecom</option>
+                                            <option>Operations</option>
+                                            <option>Civil Engineering</option>
+                                        </select>
+                                        
+                                        {userType === 'NORMAL' && (
+                                            <input placeholder="Post / Rank" className="bg-black/40 border border-white/10 p-3 rounded-lg text-sm" 
+                                                value={formData.post} onChange={e => setFormData({...formData, post: e.target.value})} />
+                                        )}
                                     </div>
+
+                                    <input required type="password" placeholder="Temporary Password" className="w-full bg-black/40 border border-white/10 p-3 rounded-lg text-sm" 
+                                        value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})} />
+
+                                    <div className="p-4 bg-white/5 rounded-lg border border-dashed border-white/10">
+                                        <p className="text-[10px] uppercase font-bold text-gray-500 mb-1">System Assigned Permissions</p>
+                                        <p className="text-xs font-mono text-amber-500">
+                                            {userType === 'ADMIN' ? "✅ View, ✅ Modify, ✅ Generate Reports" : "✅ View Data Only"}
+                                        </p>
+                                    </div>
+
+                                    <button className="w-full py-4 bg-amber-600 hover:bg-amber-500 text-black font-black rounded-xl transition-all shadow-lg shadow-amber-900/20">
+                                        CONFIRM & CREATE {userType}
+                                    </button>
+                                </form>
+                            </section>
+
+                            {/* User List / Audit Log */}
+                            <section className="col-span-7 space-y-4">
+                                <h2 className="text-lg font-bold mb-4 flex items-center gap-2">
+                                    <span className="material-symbols-outlined text-amber-500">group</span>
+                                    Active Directory
+                                </h2>
+                                <div className="space-y-3">
+                                    {users.map(user => (
+                                        <div key={user.id} className="p-4 bg-[#161a1f] border border-white/5 rounded-xl flex justify-between items-center">
+                                            <div>
+                                                <p className="font-bold text-sm">{user.name} <span className="text-[10px] ml-2 text-gray-500 uppercase">{user.dept}</span></p>
+                                                <p className="text-xs text-amber-500/80 font-mono">{user.permissions}</p>
+                                            </div>
+                                            <div className={`px-3 py-1 rounded text-[9px] font-black uppercase ${user.type === 'ADMIN' ? 'bg-blue-500 text-white' : 'bg-gray-700 text-gray-300'}`}>
+                                                {user.type}
+                                            </div>
+                                        </div>
+                                    ))}
+                                    {users.length === 0 && <p className="text-gray-600 text-sm italic">No users created in this session.</p>}
                                 </div>
-                            </div>
+                            </section>
                         </div>
                     </main>
                 </div>
             );
         };
 
-        const NavItem = ({ icon, label, active }) => (
-            <div className={`flex items-center gap-4 cursor-pointer p-2 rounded transition-colors ${active ? 'text-accent-blue bg-accent-blue/10' : 'text-[#5a868c] hover:text-white hover:bg-white/5'}`}>
-                <span className="material-symbols-outlined">{icon}</span>
-                <span className="text-xs font-bold whitespace-nowrap">{label}</span>
-            </div>
-        );
-
-        const SummaryCard = ({ icon, label, value, trend, color="text-white" }) => (
-            <div className="p-6 rounded-2xl bg-surface-dark border border-[#2b313a] hover:border-accent-blue transition-all">
-                <div className="flex justify-between items-center mb-2">
-                    <span className={`material-symbols-outlined text-sm ${color}`}>{icon}</span>
-                    <span className="text-[10px] font-black opacity-40 uppercase tracking-tighter">{trend}</span>
-                </div>
-                <p className="text-[10px] font-bold text-[#5a868c] uppercase tracking-widest">{label}</p>
-                <p className="text-2xl font-black mt-1">{value}</p>
-            </div>
-        );
-
-        const FeedItem = ({ time, user, msg, type }) => {
-            const colors = {
-                alert: 'border-l-accent-red bg-red-500/5',
-                action: 'border-l-accent-blue bg-accent-blue/5',
-                system: 'border-l-accent-green bg-accent-green/5',
-                report: 'border-l-[#5a868c] bg-white/5'
-            };
-            return (
-                <div className={`p-3 border-l-2 rounded-r-lg ${colors[type]}`}>
-                    <div className="flex justify-between text-[9px] font-black uppercase tracking-widest mb-1">
-                        <span className="text-white/40">{time}</span>
-                        <span className="text-accent-blue">{user}</span>
-                    </div>
-                    <p className="text-xs leading-relaxed opacity-80">{msg}</p>
-                </div>
-            );
-        };
-
         const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<SADashboard />);
+        root.render(<UserManagement />);
     </script>
 </body>
 </html>
