@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOIS | Station Interface Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: radial-gradient(circle at center, #ffffff 0%, #f1f5f9 100%); color: #1e293b; }
+        .glass-panel { background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(12px); border: 1px solid rgba(0, 0, 0, 0.05); }
+        .status-up { color: #059669; background: #ecfdf5; border: 1px solid #d1fae5; }
+        .status-down { color: #dc2626; background: #fef2f2; border: 1px solid #fee2e2; }
+        th { cursor: pointer; position: relative; }
+        th:hover { background: #f8fafc; }
+    </style>
+</head>
+<body class="p-4 md:p-8">
+
+    <header class="flex justify-between items-center mb-8">
+        <div class="flex items-center space-x-4">
+            <div class="glass-panel p-3 rounded-xl text-indigo-600">
+                <i class="fa-solid fa-network-wired"></i>
+            </div>
+            <div>
+                <h1 class="text-2xl font-bold tracking-wider uppercase text-slate-900">FOIS <span class="text-indigo-600 text-sm font-light">Network Config</span></h1>
+                <p class="text-[10px] text-slate-500 uppercase tracking-[0.3em]">Interface Status & IP Allocation Ledger</p>
+            </div>
+        </div>
+        <div class="flex items-center bg-white border border-slate-200 rounded-xl px-4 py-2 shadow-sm">
+            <i class="fa-solid fa-magnifying-glass text-slate-400 mr-3"></i>
+            <input type="text" id="interfaceSearch" onkeyup="filterTable()" placeholder="Search IP, Station, or Description..." class="outline-none text-sm w-80">
+        </div>
+    </header>
+
+    <div class="glass-panel rounded-3xl overflow-hidden shadow-2xl border border-black/5">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse whitespace-nowrap" id="configTable">
+                <thead>
+                    <tr class="bg-slate-50 text-slate-500 uppercase text-[10px] font-black tracking-widest border-b">
+                        <th class="p-4">Station</th>
+                        <th class="p-4">Interface</th>
+                        <th class="p-4">Status</th>
+                        <th class="p-4">Description</th>
+                        <th class="p-4">IP Address</th>
+                        <th class="p-4">Subnet Mask</th>
+                        <th class="p-4">Gateway</th>
+                        <th class="p-4">Circuit ID / E1 Details</th>
+                    </tr>
+                </thead>
+                <tbody class="text-[11px] font-medium text-slate-600 divide-y divide-black/5">
+                    <tr>
+                        <td class="p-4 font-bold text-indigo-900">PRTN-P</td>
+                        <td class="p-4 font-mono text-slate-500">Gi0/0</td>
+                        <td class="p-4"><span class="status-up px-2 py-0.5 rounded text-[9px] font-bold">UP/UP</span></td>
+                        <td class="p-4 italic">*** LINK TO LAN ***</td>
+                        <td class="p-4 font-mono">10.139.28.4</td>
+                        <td class="p-4 font-mono">255.255.255.0</td>
+                        <td class="p-4 font-mono">10.139.28.0</td>
+                        <td class="p-4 text-slate-400">-</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold text-indigo-900">PRTN-P</td>
+                        <td class="p-4 font-mono text-slate-500">Se0/0/0:0</td>
+                        <td class="p-4"><span class="status-up px-2 py-0.5 rounded text-[9px] font-bold">UP/UP</span></td>
+                        <td class="p-4 italic">BW PRTN-P TO CCG-P 2Mbps</td>
+                        <td class="p-4 font-mono">10.139.124.249</td>
+                        <td class="p-4 font-mono">255.255.255.252</td>
+                        <td class="p-4 font-mono">10.139.124.248</td>
+                        <td class="p-4">CKT: 4692972 / E1: 11-132</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold text-indigo-900">PRTN-S</td>
+                        <td class="p-4 font-mono text-slate-500">Gi0/1</td>
+                        <td class="p-4"><span class="status-up px-2 py-0.5 rounded text-[9px] font-bold">UP/UP</span></td>
+                        <td class="p-4 italic">HA MODE</td>
+                        <td class="p-4 font-mono">10.139.123.2</td>
+                        <td class="p-4 font-mono">255.255.255.252</td>
+                        <td class="p-4 font-mono">10.139.123.0</td>
+                        <td class="p-4 text-slate-400">-</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold text-indigo-900">BH-P</td>
+                        <td class="p-4 font-mono text-slate-500">Se0/1/0:0</td>
+                        <td class="p-4"><span class="status-down px-2 py-0.5 rounded text-[9px] font-bold">UP/DOWN</span></td>
+                        <td class="p-4 italic">BW CCG TO BH RCIL 2Mbps</td>
+                        <td class="p-4 font-mono">-</td>
+                        <td class="p-4 font-mono">-</td>
+                        <td class="p-4 font-mono">-</td>
+                        <td class="p-4">CKT: 20139166</td>
+                    </tr>
+                    <tr>
+                        <td class="p-4 font-bold text-indigo-900">ANND-S</td>
+                        <td class="p-4 font-mono text-slate-500">Se0/0/1:0</td>
+                        <td class="p-4"><span class="status-down px-2 py-0.5 rounded text-[9px] font-bold">DOWN</span></td>
+                        <td class="p-4 italic">BW ANND-S TO VXD 2MBPS</td>
+                        <td class="p-4 font-mono">10.139.252.26</td>
+                        <td class="p-4 font-mono">255.255.255.2</td>
+                        <td class="p-4 font-mono">10.139.252.24</td>
+                        <td class="p-4 text-rose-500 font-bold">ROUTER FAULTY</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function filterTable() {
+            const input = document.getElementById("interfaceSearch");
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById("configTable");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                let textContent = tr[i].textContent || tr[i].innerText;
+                if (textContent.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
