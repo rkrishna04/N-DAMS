@@ -171,7 +171,12 @@
                 if(mod === 'FOIS') {
                     // Make sure this filename matches your FOIS detail page filename
                     window.location.href = 'fois_details.html'; 
-                } else {
+                }
+                if(mod === 'UTS') {
+                    // Make sure this filename matches your FOIS detail page filename
+                    window.location.href = 'uts.html'; 
+                }
+                else {
                     // Default behavior for other modules
                     console.log(`Accessing ${mod} Module...`);
                 }
@@ -190,4 +195,5 @@
     </script>
 </body>
 </html>
+
 
