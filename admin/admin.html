@@ -122,10 +122,20 @@
                         </div>
                         
                         <nav className="space-y-3">
-                            <SidebarLink active icon="fa-rocket" label="Management Hub" />
-                            <SidebarLink icon="fa-database" label="Data Management" />
-                            <SidebarLink icon="fa-users" label="Manage Users" />
-                            <SidebarLink icon="fa-file-invoice" label="Reports" />
+                            <a href="#" className="flex items-center space-x-3 p-3 bg-indigo-700 rounded-lg shadow-inner">
+                                <i className="fa-solid fa-gauge"></i><span>Management Hub</span>
+                            </a>
+                            <a href="datamanagement.html" className="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
+                                <i className="fa-solid fa-file-invoice"></i><span>Data Management</span>
+                            </a>
+                            <a href="sa.html" className="flex items-center space-x-3 p-3 text-indigo-200 hover:bg-indigo-800 rounded-lg transition">
+                                <i className="fa-solid fa-users"></i><span>Manage Users</span>
+                            </a>
+                            <div className="pt-10 border-t border-indigo-800 mt-10">
+                                <button onClick={() => window.location.href='index.html'} className="flex items-center space-x-3 p-3 text-red-300 hover:bg-red-900/20 w-full rounded-lg transition">
+                                    <i className="fa-solid fa-power-off"></i><span>Logout</span>
+                                </button>
+                            </div>
                             
                             <div className="pt-10">
                                 <button className="flex items-center space-x-3 p-3 text-red-400 hover:bg-red-900/20 w-full rounded-xl transition-all">
@@ -284,3 +294,4 @@
     </script>
 </body>
 </html>
+
